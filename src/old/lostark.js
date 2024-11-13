@@ -21,24 +21,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 
         let param = cmdArr[0];
 
-        if(param == '정보'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getUserinfo(nickName));
-            }
-            else {
-                replier.reply('잘못된 명령어 입니다.');
-            }              
-        }
-        if(param == '장신구'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getUserAccessory(nickName));
-            }
-            else {
-                replier.reply('잘못된 명령어 입니다.');
-            }              
-        }
         if(param == '보석'){
             let nickName = msg.substr(cmdArr[0].length + 1).trim();
             if(isNaN(nickName)){
@@ -56,15 +38,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             else{
                 replier.reply('잘못된 명령어 입니다.');
             }
-        }
-        if(param == '장비'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getUseritem(nickName));       
-            }
-            else{
-                replier.reply('잘못된 명령어 입니다.');
-            }      
         }
         if(param == '아바타'){
             let nickName = msg.substr(cmdArr[0].length + 1).trim();
@@ -89,29 +62,18 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                 replier.reply('잘못된 명령어 입니다.');
             }        
         }
-        if(param == '내실'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getCollection(nickName));
-            }
-            else{
-                replier.reply('잘못된 명령어 입니다.');
-            }        
-        }
         if(param == '모험섬'){
             var date = new Date();
             var year = date.getFullYear();
             var month = ("0" + (1 + date.getMonth())).slice(-2);
             var day = ("0" + date.getDate()).slice(-2);
 
-            replier.reply(getIsland(year + month + day));     
+            replier.reply(getIsland(year +"-"+ month +"-"+ day));     
         }
         if(param == '크리스탈'){
             replier.reply(getCrystal());     
         }
-        if(param == '전설지도'){
-            replier.reply(getSecretMapPrice());     
-        }
+
         if(param == '부캐'){
             let nickName = msg.substr(cmdArr[0].length + 1).trim();
             if(isNaN(nickName)){
@@ -229,263 +191,6 @@ function getUserGem(nickName) {
     return headText + bodyText;
 }
 
-// 유저 정보
-function getUserinfo(nickName) {
-
-    var data0;
-
-    try{
-        data0 = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/" + nickName).ignoreContentType(true).get().text();
-    } catch(e){
-        return '존재하지 않는 캐릭터입니다.';
-    }
-
-    var infoJson = JSON.parse(data0);
-
-    var retTxt = '';
-    retTxt += "📢 "+ 'Lv.'+ infoJson.level +" " +nickName+"\n\n";
-    retTxt += '@'+Func.SERVER_CODE[infoJson.server]+'\n';
-    retTxt += Func.JOB_CODE[infoJson.job]+' ♬ '+'LV.'+infoJson.max_item_level+'\n';
-    if(infoJson.guild != null){
-        retTxt += '길드 ♬ '+ (infoJson.guild.is_owner == false ? '' :'👑')  + (infoJson.guild.name == '' ? '' :infoJson.guild.name)+'\n';
-    }else {
-        retTxt += '길드 ♬ - '+'\n';
-    }
-    retTxt += '칭호 ♬ '+ (infoJson.title == null? '-' : infoJson.title)  +'\n';
-    retTxt += '원정대 ♬ Lv.' + infoJson.expedition_level + '\nPVP ♬ '+ infoJson.pvp+'\n';
-    retTxt += '영지 ♬ '+infoJson.wisdom_name + ' Lv.' +infoJson.wisdom_level;
-
-    return retTxt;
-}
-
-// 유저 악세사리
-function getUserAccessory(nickName) {
-
-    var data0;
-
-    try{
-        data0 = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/" + nickName).ignoreContentType(true).get().text();
-    } catch(e){
-        return '존재하지 않는 캐릭터입니다.';
-    }
-
-    var infoJson = JSON.stringify(data0);
-    infoJson = JSON.parse(data0);
-
-    var necklace  = infoJson.equipments.necklace; //목걸이
-    var earring_1 = infoJson.equipments.earring_1; // 귀걸이
-    var earring_2 = infoJson.equipments.earring_2; // 귀걸이
-    var ring_1  = infoJson.equipments.ring_1; // 반지
-    var ring_2 = infoJson.equipments.ring_2; // 반지
-    var bracelet = infoJson.equipments.bracelet; // 팔찌
-    var ability_stone = infoJson.equipments.ability_stone; // 어빌리티 돌
-
-    var retTxt = "📢 "+ nickName+"님의 장신구";
-    // 목걸이
-    retTxt += '\n\n'+(necklace.grade == 6 ? '[고대]' : '[유물]') + ' ['+necklace.quality+'] '+ necklace.name + '\n';
-
-    var engrave_effects_Key = Object.keys(necklace.engrave_effects);
-    var bonus_effects_Key = Object.keys(necklace.bonus_effects);
-    // 각인효과
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ necklace.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-    retTxt += '\n';
-    // 특성
-    for(var i=0; i< bonus_effects_Key.length; i++){
-        retTxt += bonus_effects_Key[i] +' : '+ necklace.bonus_effects[bonus_effects_Key[i]]+' ';
-    }
-
-    // 귀걸이1
-    retTxt += '\n\n'+(earring_1.grade == 6 ? '[고대]' : '[유물]') + ' ['+earring_1.quality+'] '+ earring_1.name + '\n';
-
-    engrave_effects_Key = Object.keys(earring_1.engrave_effects);
-    bonus_effects_Key = Object.keys(earring_1.bonus_effects);
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ earring_1.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-    retTxt += '\n';
-    for(var i=0; i< bonus_effects_Key.length; i++){
-        retTxt += bonus_effects_Key[i] +' : '+ earring_1.bonus_effects[bonus_effects_Key[i]]+' ';
-    }
-
-    // 귀걸이2
-    retTxt += '\n\n'+(earring_2.grade == 6 ? '[고대]' : '[유물]') + ' ['+earring_2.quality+'] '+ earring_2.name + '\n';
-
-    engrave_effects_Key = Object.keys(earring_2.engrave_effects);
-    bonus_effects_Key = Object.keys(earring_2.bonus_effects);
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ earring_2.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-    retTxt += '\n';
-    for(var i=0; i< bonus_effects_Key.length; i++){
-        retTxt += bonus_effects_Key[i] +' : '+ earring_2.bonus_effects[bonus_effects_Key[i]]+' ';
-    }
-
-    // 반지1
-    retTxt += '\n\n'+(ring_1.grade == 6 ? '[고대]' : ' [유물]') + ' ['+ring_1.quality+'] '+ ring_1.name + '\n';
-
-    engrave_effects_Key = Object.keys(ring_1.engrave_effects);
-    bonus_effects_Key = Object.keys(ring_1.bonus_effects);
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ ring_1.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-    retTxt += '\n';
-    for(var i=0; i< bonus_effects_Key.length; i++){
-        retTxt += bonus_effects_Key[i] +' : '+ ring_1.bonus_effects[bonus_effects_Key[i]]+' ';
-    }
-
-    // 반지2
-    retTxt += '\n\n'+(ring_2.grade == 6 ? '[고대]' : '[유물]') + ' ['+ring_2.quality+'] '+ ring_2.name + '\n';
-
-    engrave_effects_Key = Object.keys(ring_2.engrave_effects);
-    bonus_effects_Key = Object.keys(ring_2.bonus_effects);
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ ring_2.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-    retTxt += '\n';
-    for(var i=0; i< bonus_effects_Key.length; i++){
-        retTxt += bonus_effects_Key[i] +' : '+ ring_2.bonus_effects[bonus_effects_Key[i]]+' ';
-    }
-
-    // 팔찌
-    retTxt += '\n\n'+(bracelet.grade == 6 ? '[고대] ' : '[유물] ') + bracelet.name + '\n';
-
-    var braceletEffects = bracelet.effects;
-    for(var i=0; i< braceletEffects.length; i++){
-        retTxt += braceletEffects[i].name +' '+ (braceletEffects[i].value != null ? braceletEffects[i].value : '')+' ';
-    }
-
-    // 어빌리티 스톤
-    retTxt += '\n\n'+(ability_stone.grade == 6 ? '[고대] ' : '[유물] ') + ability_stone.name + '\n';
-
-    engrave_effects_Key = Object.keys(ability_stone.engrave_effects);
-    for(var i=0; i< engrave_effects_Key.length; i++){
-        retTxt += engrave_effects_Key[i] +' '+ ability_stone.engrave_effects[engrave_effects_Key[i]]+' ';
-    }
-
-    return retTxt;
-}
-
-// 유저 장비
-function getUseritem(nickName) {
-
-    var data0;
-
-    try{
-        data0 = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/" + nickName).ignoreContentType(true).get().text();
-        data1 = org.jsoup.Jsoup.connect("https://kloa.gg/crow/" + nickName).ignoreContentType(true).get().text();
-    } catch(e){
-        return '존재하지 않는 캐릭터입니다.';
-    }
-
-    var infoJson = JSON.stringify(data0);
-    infoJson = JSON.parse(data0);
-
-    var retTxt = '';
-    retTxt += "📢 "+nickName+"님의 장비" +"\n\n";
-    retTxt += "공격력 : "+infoJson.basic_effect.offense+"\n";
-    retTxt += "HP     : "+infoJson.basic_effect.vitality+"\n";
-    retTxt += "\n☆ [특성]\n";
-    retTxt += "치명 " + infoJson.battle_effect.crit + " 특화 "+infoJson.battle_effect.specialization+"\n";
-    retTxt += "제압 " + infoJson.battle_effect.domination + " 신속 "+infoJson.battle_effect.swiftness+"\n";
-    retTxt += "인내 " + infoJson.battle_effect.endurance + " 숙련 "+infoJson.battle_effect.expertise+"\n";
-    retTxt += "\n☆ [각인]\n";
-    for(var i = 0; i < infoJson.engraves.length; i++){
-        retTxt += 'Lv.'+infoJson.engraves[i].level+' '+infoJson.engraves[i].name+"\n";
-    }
-
-    // var cardKey = Object.keys(infoJson.card_effects);
-    // if(cardKey.length < 1){
-    //     retTxt += "\n☆ [카드]\n";
-    //     retTxt += infoJson.card_effects[cardKey][infoJson.card_effects[cardKey].length-1].name+'\n';
-    // }
-
-    var elixir_lv = 0;
-    var hat    = infoJson.equipments.hat; //모자
-    var ornament = infoJson.equipments.ornament; // 견갑
-    var top    = infoJson.equipments.top; // 상의
-    var pants  = infoJson.equipments.pants; // 하의
-    var gloves = infoJson.equipments.gloves; // 장갑
-    var weapon = infoJson.equipments.weapon; // 무기
-    var avg_quality = (hat.quality + ornament.quality + top.quality + pants.quality + gloves.quality + weapon.quality) / 6;
-    retTxt += "\n☆ [장비] 평균 품질 "+ avg_quality +"\n";
-    retTxt += "["+hat.quality+"] +"+hat.reinforce+' '+hat.name+ "\n";
-    if(hat.elixir_effect != null){
-        for(var i=0; i < hat.elixir_effect.details.length; i++){
-            retTxt += (hat.elixir_effect.details[i].name+' Lv.'+hat.elixir_effect.details[i].level+'\n');
-            elixir_lv += hat.elixir_effect.details[i].level;
-        } 
-    }
-    if(hat.transcendence != null){
-        var step =hat.transcendence.step;
-        var point =hat.transcendence.point;
-        retTxt += '초월 '+step+'단계 Lv.'+point+'\n';
-        retTxt += '\n';
-    }
-    retTxt += "["+ornament.quality+"] +"+ornament.reinforce+' '+ornament.name+ "\n";
-    if(ornament.elixir_effect != null){
-        for(var i=0; i < ornament.elixir_effect.details.length; i++){
-            retTxt += (ornament.elixir_effect.details[i].name+' Lv.'+ornament.elixir_effect.details[i].level+'\n');
-            elixir_lv += ornament.elixir_effect.details[i].level;
-        }
-    }
-    if(ornament.transcendence != null){
-        var step =ornament.transcendence.step;
-        var point =ornament.transcendence.point;
-        retTxt += '초월 '+step+'단계 Lv.'+point+'\n';
-        retTxt += '\n';
-    }
-    retTxt += "["+top.quality+"] +"+top.reinforce+' '+top.name+ "\n";
-    if(top.elixir_effect != null){
-        for(var i=0; i < top.elixir_effect.details.length; i++){
-            retTxt += (top.elixir_effect.details[i].name+' Lv.'+top.elixir_effect.details[i].level+'\n');
-            elixir_lv += top.elixir_effect.details[i].level;
-        }
-    }
-    if(top.transcendence != null){
-        var step =top.transcendence.step;
-        var point =top.transcendence.point;
-        retTxt += '초월 '+step+'단계 Lv.'+point+'\n';
-        retTxt += '\n';
-    }
-    retTxt += "["+pants.quality+"] +"+pants.reinforce+' '+pants.name+ "\n";
-    if(pants.elixir_effect != null){
-        for(var i=0; i < pants.elixir_effect.details.length; i++){
-            retTxt += (pants.elixir_effect.details[i].name+' Lv.'+pants.elixir_effect.details[i].level+'\n');
-            elixir_lv += pants.elixir_effect.details[i].level;
-        }
-    }
-    if(pants.transcendence != null){
-        var step =pants.transcendence.step;
-        var point =pants.transcendence.point;
-        retTxt += '초월 '+step+'단계 Lv.'+point+'\n';
-        retTxt += '\n';
-    }
-    retTxt += "["+gloves.quality+"] +"+gloves.reinforce+' '+gloves.name+ "\n";
-    if(gloves.elixir_effect != null){
-        for(var i=0; i < gloves.elixir_effect.details.length; i++){
-            retTxt += (gloves.elixir_effect.details[i].name+' Lv.'+gloves.elixir_effect.details[i].level+'\n');
-            elixir_lv += gloves.elixir_effect.details[i].level;
-        }
-    }
-    if(gloves.transcendence != null){
-        var step =gloves.transcendence.step;
-        var point =gloves.transcendence.point;
-        retTxt += '초월 '+step+'단계 Lv.'+point+'\n';
-        retTxt += '\n';
-    }
-    retTxt += "["+weapon.quality+"] +"+weapon.reinforce+' '+weapon.name+ "\n";
-
-    // 엘릭서 정보
-    if(elixir_lv != 0){
-        var elixir_setName = Object.keys(infoJson.equipments.elixir_set_effects);
-        retTxt += elixir_setName + " Lv."+elixir_lv+" "; // 엘릭서 담긴 정보    
-    }
-
-    return retTxt;
-}
-
 // 분배금 최적가
 function calGold(gold){
     var party4 = 0.95 * 0.75;
@@ -547,93 +252,42 @@ function getMarketInfo(serverName){
     return header + result;
 }
 
-// 내실 정보
-function getCollection(nickName){
-
-    let info;
-    try{
-        info = JSON.parse(org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/"+nickName+"/collection").ignoreContentType(true).get().text());
-    }
-    catch(e){
-        return '존재하지않는 캐릭터입니다.';
-    }
-
-    var infoJson = info;
-
-    if(infoJson.code == 404000){
-        return infoJson.errors.msg;
-    }
-
-    var island_heart_Arr = infoJson.island_heart;
-    var giant_heart_Arr = infoJson.giant_heart;
-    var ignea_token_Arr = infoJson.ignea_token;
-    var masterpiece_Arr = infoJson.masterpiece;
-    var memory_orgel_Arr = infoJson.memory_orgel;
-    var mokoko_seed_Arr = infoJson.mokoko_seed;
-    var orpheus_star_Arr = infoJson.orpheus_star;
-    var sea_bounty_Arr = infoJson.sea_bounty;
-    var world_tree_leaf_Arr = infoJson.world_tree_leaf;
-
-    var island_heart_score = Math.floor(island_heart_Arr.value/island_heart_Arr.max_value*100);
-    var giant_heart_score = Math.floor(giant_heart_Arr.value/giant_heart_Arr.max_value*100);
-    var ignea_token_score = Math.floor(ignea_token_Arr.value/ignea_token_Arr.max_value*100);
-    var masterpiece_score = Math.floor(masterpiece_Arr.value/masterpiece_Arr.max_value*100);
-    var memory_orgel_score = Math.floor(memory_orgel_Arr.value/memory_orgel_Arr.max_value*100);
-    var mokoko_seed_score =  Math.floor(mokoko_seed_Arr.value/mokoko_seed_Arr.max_value*100);
-    var orpheus_star_score = Math.floor(orpheus_star_Arr.value/orpheus_star_Arr.max_value*100);
-    var sea_bounty_score = Math.floor(sea_bounty_Arr.value/sea_bounty_Arr.max_value*100);
-    var world_tree_leaf_score = Math.floor(world_tree_leaf_Arr.value/world_tree_leaf_Arr.max_value*100);
-
-    var avg_collect = (island_heart_score + giant_heart_score + ignea_token_score + masterpiece_score + memory_orgel_score + mokoko_seed_score +
-                        orpheus_star_score + sea_bounty_score + world_tree_leaf_score) / 9;
-    var header = '📢 내실 - '+nickName+'  ｡·͜·｡\n\n';
-    var result = '';
-    result += '▶️ ' + island_heart_Arr.name +' ['+ island_heart_Arr.value + ' / ' + island_heart_Arr.max_value + '] '+ island_heart_score +'%\n';
-    result += '▶️ ' + giant_heart_Arr.name +' ['+ giant_heart_Arr.value + ' / ' + giant_heart_Arr.max_value + '] '+ giant_heart_score +'%\n';
-    result += '▶️ ' + ignea_token_Arr.name +' ['+ ignea_token_Arr.value + ' / ' + ignea_token_Arr.max_value + '] '+ ignea_token_score +'%\n';
-    result += '▶️ ' + masterpiece_Arr.name +' ['+ masterpiece_Arr.value + ' / ' + masterpiece_Arr.max_value + '] '+ masterpiece_score +'%\n';
-    result += '▶️ ' + memory_orgel_Arr.name +' ['+ memory_orgel_Arr.value + ' / ' + memory_orgel_Arr.max_value + '] '+ memory_orgel_score +'%\n';
-    result += '▶️ ' + mokoko_seed_Arr.name +' ['+ mokoko_seed_Arr.value + ' / ' + mokoko_seed_Arr.max_value + '] '+ mokoko_seed_score+'%\n';
-    result += '▶️ ' + orpheus_star_Arr.name +' ['+ orpheus_star_Arr.value + ' / ' + orpheus_star_Arr.max_value + '] '+ orpheus_star_score +'%\n';
-    result += '▶️ ' + sea_bounty_Arr.name +' ['+ sea_bounty_Arr.value + ' / ' + sea_bounty_Arr.max_value + '] '+ sea_bounty_score +'%\n';
-    result += '▶️ ' + world_tree_leaf_Arr.name +' ['+ world_tree_leaf_Arr.value + ' / ' + world_tree_leaf_Arr.max_value + '] '+ world_tree_leaf_score +'%\n';
-    result += '\n내실 점수 : ' + Math.floor(avg_collect) + '%';
-    return header + result;
-}
-
 // 금일 모험섬 정보
 function getIsland(today){
-    let info = JSON.parse(org.jsoup.Jsoup.connect("https://api.korlark.com/calendars/island?date="+today).ignoreContentType(true).get().text());
+    let info = JSON.parse(org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/calendar/adventure-islands?date="+today).ignoreContentType(true).get().text());
 
     var infoJson = info;
 
 
-    var header = '📢 오늘의 모험섬 정보 (ว˙∇˙)ง\n\n';
+    var header = '📢 오늘의 모험섬 정보 (ว˙∇˙)ง\n'+today+'\n';
     var result = '';
 
-    for(var i=0; i < infoJson.islands.length; i++){
+    for(var i=0; i < infoJson.length; i++){
         if(i == 3){
             result += '\n------------------------------------\n\n';
         }
         var reward = '';
-        if(infoJson.islands[i].reward == 0){
+        if(infoJson[i].bonusRewardType == 0){
             reward = '골드'
         }
-        else if(infoJson.islands[i].reward == 1){
+        else if(infoJson[i].bonusRewardType == 1){
             reward = '카드'
         }
-        else if(infoJson.islands[i].reward == 2){
+        else if(infoJson[i].bonusRewardType == 2){
             reward = '주화'
         }
-        else if(infoJson.islands[i].reward == 3){
+        else if(infoJson[i].bonusRewardType == 3){
             reward = '실링'
         } 
         else {
             
         }
 
-        result += '▶️ ' + infoJson.islands[i].name +' ⎝⍥⎠ ' + reward +'섬 \n';
+        result += '▶️ ' + infoJson[i].name +' ⎝⍥⎠ ' + reward +'섬';
 
+        if(i != infoJson.length-1){
+            result += "\n";
+        }
     }
 
 
@@ -658,31 +312,6 @@ function getCrystal(){
     }
     
     result += '\n\n100 크리스탈 : 골드 (기준 : 1시간)'
-    return result;
-}   
-
-// 전설지도 실시간 가격
-function getSecretMapPrice(){
-    var data0 = org.jsoup.Jsoup.connect("https://loatool.taeu.kr/calculator/secret-map").ignoreContentType(true).get();
-    
-    // 전설지도가격
-    var price = data0.select("#app > div > main > div > div > div > div > div.d-flex.flex-row.justify-center > div.main-container.d-flex.flex-row.justify-center > div > div.v-window.v-item-group.theme--light.v-tabs-items > div > div > div:nth-child(1) > div > div:nth-child(1)").text();
-    // 판매수수료
-    var fee = data0.select("#app > div > main > div > div > div > div > div.d-flex.flex-row.justify-center > div.main-container.d-flex.flex-row.justify-center > div > div.v-window.v-item-group.theme--light.v-tabs-items > div > div > div:nth-child(1) > div > div:nth-child(2)").text();
-    // 손인분기점
-    var plus = data0.select("#app > div > main > div > div > div > div > div.d-flex.flex-row.justify-center > div.main-container.d-flex.flex-row.justify-center > div > div.v-window.v-item-group.theme--light.v-tabs-items > div > div > div:nth-child(1) > div > div:nth-child(3)").text();
-    // 입찰적정가
-    var buy = data0.select("#app > div > main > div > div > div > div > div.d-flex.flex-row.justify-center > div.main-container.d-flex.flex-row.justify-center > div > div.v-window.v-item-group.theme--light.v-tabs-items > div > div > div:nth-child(1) > div > div:nth-child(4)").text();
-    // 분배금
-    var n = data0.select("#app > div > main > div > div > div > div > div.d-flex.flex-row.justify-center > div.main-container.d-flex.flex-row.justify-center > div > div.v-window.v-item-group.theme--light.v-tabs-items > div > div > div:nth-child(1) > div > div:nth-child(5)").text();
-    
-    var result = '📢 실시간 전설지도 시세 정보 [볼다이크]\n\n';
-    result += '      '+price + '\n';
-    result += '      '+fee + '\n';
-    result += '▶️ '+plus + '\n';
-    result += '▶️ '+buy + '\n';
-    result += '      '+n + '\n';
-
     return result;
 }   
 

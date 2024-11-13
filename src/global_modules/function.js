@@ -27,6 +27,64 @@ module.exports.BOOKINDEX = {"저받":"저주받은 인형", "예둔":"예리한 
 
 module.exports.STUFFINDEX = ['찬란한 명예의 돌파석','정제된 파괴강석','정제된 수호강석'];
 
+// 장비 등급
+module.exports.getGradeName = (grade) => { 
+    return grade == 6 ? "[고대]":"[유물]";
+} 
+
+// 장비 아이템 이름
+module.exports.getItemTitle = (item) => {
+    return item.quality + " " + module.exports.getGradeName(item.grade) + " +"+item.reinforce +"강("+item.advancedReinforce+") " + item.name.substring(4,6);
+}
+
+// 엘릭서 정보
+module.exports.getElixir = (item) => {
+    var retElixir = "";
+    if(item.elixir != null){
+        for(var i=0; i < item.elixir.effects.length; i++){
+            retElixir += (item.elixir.effects[i].name).replace(" ","");
+            retElixir += ("Lv"+item.elixir.effects[i].level);
+            retElixir += " ";
+        } 
+    }
+    return retElixir;
+}
+
+// 초월 정보
+module.exports.getTranscendence = (item) => {
+    return "초월"+(item && item.transcendence && item.transcendence.point) || 0;
+}
+
+// 장신구 정보
+module.exports.getAccessories = (item) => {
+    // 악세
+    var retTxt = '\n\n'+ item.quality +" "+ module.exports.getGradeName(item.grade) + ' '+ item.name + '\n';
+        
+    var engrave_effects = Object.keys(item.engraveEffects);
+    var enforce_effects = Object.keys(item.enforceEffects);
+
+    // 각인효과
+    for(var i=0; i< engrave_effects.length; i++){
+        retTxt += item.engraveEffects[i].name +' '+ item.engraveEffects[i].point+' ';
+    }
+    for(var i=0; i< enforce_effects.length; i++){
+        retTxt += item.enforceEffects[i]+' ';
+    }
+
+    return retTxt;
+}
+
+// 내실 정보
+module.exports.getCollection = (item) => {
+    const score = Math.floor((item.value / item.max_value) * 100);
+    const result = '▶️ ' + item.name + ' [' + item.value + ' / ' + item.max_value + '] ' + score + '%\n';
+    
+    return {
+        result,  // 결과 문자열
+        score    // score 값
+    };
+}
+
 // 이미지 출력 함수
 module.exports.makeImg = (url,title,desc) => { 
 
