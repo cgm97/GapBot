@@ -13,6 +13,13 @@ module.exports.SERVER_CODE = {'1':'루페온','2':'실리안','3':'아만','4':'
 // LV별 획득골드량
 module.exports.LV_GOLD = {'1620':65500,'1600':28000,'1580':22000,'1560':16500,'1550':16000,'1540':14500,'1520':12400,'1500':12400,'1490':9900};
 
+module.exports.REWARD = {
+    0: '골드',
+    1: '카드',
+    2: '주화',
+    3: '실링'
+};
+
 // 분양받은 room 리스트
 module.exports.ROOMLIST = ['로스트아크빈틈','기분좋은향기','삼로친구들','어이없넹','실례','뀨띠뽀짝채팅방','파타퐁'];
 
@@ -79,10 +86,10 @@ module.exports.getCollection = (item) => {
     const score = Math.floor((item.value / item.max_value) * 100);
     const result = '▶️ ' + item.name + ' [' + item.value + ' / ' + item.max_value + '] ' + score + '%\n';
     
-    return {
-        result,  // 결과 문자열
-        score    // score 값
-    };
+    const output = {}; // 빈 객체 생성
+    output.result = result; // result 속성 추가
+    output.score = score; // score 속성 추가
+    return output;
 }
 
 // 이미지 출력 함수
