@@ -2,7 +2,7 @@ const scriptName = "LostArk";
 
 const KakaoLinkModule = require('KakaoLinkModule');
 const Func = require('function');
-
+const imgUrl = "https://pica.korlark.com/";
 /**
  * (string) room
  * (string) sender
@@ -103,8 +103,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             var characterInfo = JSON.parse(croll);
 
             var weapon = characterInfo.equipments.weapon;
-
-            var imgUrl = "https://pica.korlark.com/";
             var argWeapon = {
                 title : "무기",
                 itemTitle_1 : Func.getItemTitle(weapon),
@@ -181,7 +179,58 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 
             replier.reply(result);
         }
+        else if(param == '모험섬'){
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = ("0" + (1 + date.getMonth())).slice(-2);
+            var day = ("0" + date.getDate()).slice(-2);
+            
+            // 요일 배열 (일요일부터 시작)
+            var daysInKorean = ["일", "월", "화", "수", "목", "금", "토"];
+            var dayOfWeek = daysInKorean[date.getDay()];     
+            var today = year + "-" + month + "-" + day;
+            
+            // 토요일 또는 일요일이고 13시 기준으로 이전이면 0, 이후면 1
+            var timeCheck = 0;
+            if ((dayOfWeek === "토" || dayOfWeek === "일") && date.getHours() >= 12) {
+                timeCheck = 1;
+            }
+            var islandJson = JSON.parse(org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/calendar/adventure-islands?date="+today).ignoreContentType(true).get().text());
+            
+            // 결과를 저장할 배열
+            var selectedIslands = [];
+            var count = 0;
+    
+            for (var i = 0; i < islandJson.length; i++) {
+                if (islandJson[i].time === timeCheck) {
+                    selectedIslands.push(islandJson[i]);
+                    count++;
+                    if (count === 3) break; // 3개 찾으면 종료
+                }
+            }
+           
+            var args = {
+                today : today,
+                day : dayOfWeek,
+                type : (dayOfWeek === "토" || dayOfWeek === "일") ? (timeCheck == 0 ? "오전" : "오후") : "",
+                islandName_1 : selectedIslands[0].name,
+                bonusReward_1: Func.REWARD[selectedIslands[0].bonusRewardType],
+                img1 : imgUrl+selectedIslands[0].icon,
+                islandName_2 : selectedIslands[1].name,
+                bonusReward_2: Func.REWARD[selectedIslands[1].bonusRewardType],
+                img2 : imgUrl+selectedIslands[1].icon,
+                islandName_3 : selectedIslands[2].name,
+                bonusReward_3: Func.REWARD[selectedIslands[2].bonusRewardType],
+                img3 : imgUrl+selectedIslands[2].icon,
+    
+            };
+
+            // replier.reply(JSON.stringify(args));
+            KakaoLinkModule.send(114231,args,room);
+    
+        }
     }
+    
 }
 
 
