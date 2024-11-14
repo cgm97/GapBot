@@ -102,13 +102,13 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             }       
         }
         if(param == '경매장'){ // 보석
-            let itemName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(itemName)){
-                replier.reply(getPriceAuctionItem(itemName));
-            }
-            else{
-                replier.reply('잘못된 명령어 입니다.');
-            }       
+            // let itemName = msg.substr(cmdArr[0].length + 1).trim();
+            // if(isNaN(itemName)){
+            //     replier.reply(getPriceAuctionItem(itemName));
+            // }
+            // else{
+            //     replier.reply('잘못된 명령어 입니다.');
+            // }       
         }
         if(param == '클골'){ 
             replier.reply("클리어(더보기)\n"+

@@ -227,13 +227,57 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 
             // replier.reply(JSON.stringify(args));
             KakaoLinkModule.send(114231,args,room);
-    
+        }
+        else if(param == '경매장'){ // 보석
+            if(isNaN(str)){
+                var args = getPriceAuctionItem(str);
+                KakaoLinkModule.send(114257,args,room)
+            }
+            else{
+                replier.reply('잘못된 명령어 입니다.');
+            }       
         }
     }
     
 }
 
+// 경매장
+function getPriceAuctionItem(itemName) {
+   
+    var keys = Object.keys(Func.GEMINDEX); 
 
+    var flag='';
+    for(var i=0; i < keys.length; i++){
+        if(keys[i] == itemName){
+            flag = '보석';
+            itemName = Func.GEMINDEX[keys[i]];
+            break;
+        }
+    }  
+    var priceJson = Func.getItemPrice(itemName,flag);
+    var price;
+    try{
+        if(flag == '보석'){
+            price = priceJson.Items[0].AuctionInfo.BuyPrice;
+            var args = {
+                itemName : itemName,
+                flag : flag,
+                price : set_comma(price),
+                img : priceJson.Items[0].Icon
+            };      
+        } 
+        return args;
+    } catch(e){
+        return '잘못된 아이템 명이거나 존재하지 않습니다.';
+    }
+}
+
+// 천단위 콤마 함수
+function set_comma(price) {
+
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+}
 //아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
 function onCreate(savedInstanceState, activity) {
   var textView = new android.widget.TextView(activity);
