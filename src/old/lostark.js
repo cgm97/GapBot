@@ -68,7 +68,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             var month = ("0" + (1 + date.getMonth())).slice(-2);
             var day = ("0" + date.getDate()).slice(-2);
 
-            replier.reply(getIsland(year +"-"+ month +"-"+ day));     
+            //replier.reply(getIsland(year +"-"+ month +"-"+ day));     
         }
         if(param == '크리스탈'){
             replier.reply(getCrystal());     
@@ -192,9 +192,10 @@ function getUserGem(nickName) {
 }
 
 // 분배금 최적가
-function calGold(gold){
+function calGold(gold) {
     var party4 = 0.95 * 0.75;
     var party8 = 0.95 * 0.875;
+    var party16 = 0.95 * 0.9375;
 
     var result = '';
 
@@ -205,6 +206,10 @@ function calGold(gold){
     result += '\n[8인 경매 추천 금액]';
     result += '\n* 이 금액이 짱 최고이득 : ' + Math.floor(gold * party8 * 0.909);
     result += '\n* 이 금액이 딱 마지노선 : ' + Math.floor(gold * party8);
+    result += '\n--------------------';
+    result += '\n[16인 경매 추천 금액]';
+    result += '\n* 이 금액이 짱 최고이득 : ' + Math.floor(gold * party16 * 0.909);
+    result += '\n* 이 금액이 딱 마지노선 : ' + Math.floor(gold * party16);
 
     return result;
 }
@@ -596,7 +601,7 @@ function getPriceAuctionItem(itemName) {
             price = priceJson.Items[0].AuctionInfo.BuyPrice;
             result +=  '📢 '+ itemName+'\n';
             // result +=  '현재가 : '+set_comma(price);
-            result +=  Func.makeImg(priceJson.Items[0].Icon,itemName,set_comma(price));
+            // result +=  Func.makeImg(priceJson.Items[0].Icon,itemName,set_comma(price));
         } 
 
     } catch(e){
