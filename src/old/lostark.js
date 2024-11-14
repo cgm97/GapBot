@@ -566,8 +566,9 @@ function getPriceMarketItem(itemName) {
         else if(flag == '에스더'){
             price = priceJson.Items[0].CurrentMinPrice;
             result +=  '📢 '+ itemName+'\n';
+            result +=  set_comma(price);
             // result +=  '현재가 : '+set_comma(price);
-            result +=  Func.makeImg(priceJson.Items[0].Icon,itemName,set_comma(price));
+            // result +=  Func.makeImg(priceJson.Items[0].Icon,itemName,set_comma(price));
         } 
 
     } catch(e){
@@ -600,6 +601,7 @@ function getPriceAuctionItem(itemName) {
         if(flag == '보석'){
             price = priceJson.Items[0].AuctionInfo.BuyPrice;
             result +=  '📢 '+ itemName+'\n';
+            result +=  set_comma(price);
             // result +=  '현재가 : '+set_comma(price);
             // result +=  Func.makeImg(priceJson.Items[0].Icon,itemName,set_comma(price));
         } 
