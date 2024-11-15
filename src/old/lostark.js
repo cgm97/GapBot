@@ -74,15 +74,15 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             replier.reply(getCrystal());     
         }
 
-        if(param == '부캐'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getSubUserInfo(nickName));
-            }
-            else{
-                replier.reply('잘못된 명령어 입니다.');
-            }         
-        }
+        // if(param == '부캐'){
+        //     let nickName = msg.substr(cmdArr[0].length + 1).trim();
+        //     if(isNaN(nickName)){
+        //         replier.reply(getSubUserInfo(nickName));
+        //     }
+        //     else{
+        //         replier.reply('잘못된 명령어 입니다.');
+        //     }         
+        // }
         if(param == '주급'){
             let nickName = msg.substr(cmdArr[0].length + 1).trim();
             if(isNaN(nickName)){

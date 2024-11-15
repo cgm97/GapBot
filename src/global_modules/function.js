@@ -115,6 +115,32 @@ module.exports.getCollection = (item) => {
     return output;
 }
 
+// 원정대 캐릭터 관련
+module.exports.getMemberLv = (sortedMembers, index) => {
+    var lv = sortedMembers[index] && sortedMembers[index].maxItemLevel ? sortedMembers[index].maxItemLevel : "";
+    if (lv) {
+        lv = "Lv" + lv;      
+    } else {
+        lv = ""; // 값이 없을 때 기본값 설정
+    }
+    return lv;
+}
+
+module.exports.getMemberName = (sortedMembers, index) => {
+    var name = sortedMembers[index] && sortedMembers[index].name ? sortedMembers[index].name : "";
+    return name;
+}
+
+module.exports.getMemberJob = (sortedMembers, index) => {
+    var job = Func.JOB_CODE[sortedMembers[index] && sortedMembers[index].job ? sortedMembers[index].job : ""];
+    if (job) {
+        job = "[" + job + "]";      
+    } else {
+        job = ""; // 값이 없을 때 기본값 설정
+    }
+    return job;
+}
+
 // 이미지 출력 함수
 module.exports.makeImg = (url,title,desc) => { 
 

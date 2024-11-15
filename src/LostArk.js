@@ -228,10 +228,58 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             // replier.reply(JSON.stringify(args));
             KakaoLinkModule.send(114231,args,room);
         }
+        else if(param == '부캐'){
+            var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+            var characterInfo = JSON.parse(croll);
+
+            var memberArr = characterInfo.members;
+            // 현재 검색된 캐릭의 서버
+            var server = characterInfo.server;
+
+            var myCharacter = [];
+            for(var i=0; i < memberArr.length; i++){
+                if(memberArr[i].server == server && memberArr[i].maxItemLevel != -1){
+                    myCharacter.push(memberArr[i]);
+                }
+                // replier.reply(memberArr[i].server);
+            }
+
+            // maxItemLevel 내림차순 정렬
+            const sortedMembers = myCharacter.sort((a, b) => b.maxItemLevel - a.maxItemLevel); // maxItemLevel 기준 내림차순 정렬
+            var args = {
+                nickName: str,
+                server: Func.SERVER_CODE[server],
+            
+                name: Func.getMemberName(sortedMembers, 0),
+                title: Func.getMemberLv(sortedMembers, 0),
+                job: Func.getMemberJob(sortedMembers, 0),
+
+                title_1: Func.getMemberLv(sortedMembers, 1),
+                name_1: Func.getMemberName(sortedMembers, 1),
+                job_1: Func.getMemberJob(sortedMembers, 1),
+
+                title_2: Func.getMemberLv(sortedMembers, 2),
+                name_2: Func.getMemberName(sortedMembers, 2),
+                job_2: Func.getMemberJob(sortedMembers, 2),
+
+                title_3:Func.getMemberLv(sortedMembers, 3),
+                name_3: Func.getMemberName(sortedMembers, 3),
+                job_3: Func.getMemberJob(sortedMembers, 3),
+
+                title_4: Func.getMemberLv(sortedMembers, 4),
+                name_4: Func.getMemberName(sortedMembers, 4),
+                job_4: Func.getMemberJob(sortedMembers, 4),
+
+                title_5: Func.getMemberLv(sortedMembers, 5),
+                name_5: Func.getMemberName(sortedMembers, 5),
+                job_5: Func.getMemberJob(sortedMembers, 5),
+            }; 
+            KakaoLinkModule.send(114294,args,room);
+        }
         else if(param == '경매장'){ // 보석
             if(isNaN(str)){
                 var args = getPriceAuctionItem(str);
-                KakaoLinkModule.send(114257,args,room)
+                KakaoLinkModule.send(114257,args,room);
             }
             else{
                 replier.reply('잘못된 명령어 입니다.');
