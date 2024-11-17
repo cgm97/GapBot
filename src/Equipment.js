@@ -12,6 +12,11 @@ const Func = require('function');
  * (string) packageName
  */
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
+    
+    if(!room.includes("KM")) {
+        return;
+    }
+    
     let cmd = msg.slice(1);
     var cmdArr = cmd.split(' ');
     let param = cmdArr[0];

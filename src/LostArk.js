@@ -14,6 +14,11 @@ const imgUrl = "https://pica.korlark.com/";
  */
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 
+    if(!room.includes("KM")) {
+        replier.reply("빈틈봇 실행 권한이 없습니다.");
+        return;
+    }
+
     if(msg.startsWith(".")){
 
         let cmd = msg.slice(1);
@@ -224,8 +229,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                 img3 : imgUrl+selectedIslands[2].icon,
     
             };
-
-            // replier.reply(JSON.stringify(args));
             KakaoLinkModule.send(114231,args,room);
         }
         else if(param == '부캐'){
@@ -241,7 +244,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                 if(memberArr[i].server == server && memberArr[i].maxItemLevel != -1){
                     myCharacter.push(memberArr[i]);
                 }
-                // replier.reply(memberArr[i].server);
             }
 
             // maxItemLevel 내림차순 정렬
@@ -275,6 +277,61 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                 job_5: Func.getMemberJob(sortedMembers, 5),
             }; 
             KakaoLinkModule.send(114294,args,room);
+        }
+        else if(param == '주급'){
+            var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+            var characterInfo = JSON.parse(croll);
+
+            var memberArr = characterInfo.members;
+            // 현재 검색된 캐릭의 서버
+            var server = characterInfo.server;
+
+            // 1415이상 캐릭이면서 상위 6캐릭터만
+            var myCharacter = [];
+            for(var i=0; i < memberArr.length; i++){
+                if(memberArr[i].server == server && memberArr[i].maxItemLevel >= 1415){
+                    myCharacter.push(memberArr[i]);
+                }
+            }
+            myCharacter = myCharacter.sort((a, b) => b.maxItemLevel - a.maxItemLevel); // maxItemLevel 기준 내림차순 정렬
+
+            const retRaid = [];
+            // 멤버별 최상위 3개의 레이드를 계산
+            myCharacter.forEach(myCharacter => {
+                const top3Raids = Func.getTop3UniqueRaidsForMember(myCharacter);
+                retRaid.push(top3Raids);
+                // replier.reply(myCharacter.name);
+                // if (top3Raids.length > 0) {
+                //     top3Raids.forEach(raid => {
+                //         replier.reply(raid.raidName + raid.difficulty + raid.reward);
+                //     });
+                // } else {
+                //     replier.reply("  - No available raids");
+                // }
+                // replier.reply("\n");
+            });
+            var args = {
+                nickName_0 : Func.getMemberName(myCharacter,0),
+                gold_0 : set_comma(Func.sumGold(retRaid, 0)) + "G",
+
+                nickName_1 : Func.getMemberName(myCharacter,1),
+                gold_1 : set_comma(Func.sumGold(retRaid, 1)) + "G",
+
+                nickName_2 : Func.getMemberName(myCharacter,2),
+                gold_2 : set_comma(Func.sumGold(retRaid, 2)) + "G",
+
+                nickName_3 : Func.getMemberName(myCharacter,3),
+                gold_3 : set_comma(Func.sumGold(retRaid, 3)) + "G",
+
+                nickName_4 : Func.getMemberName(myCharacter,4),
+                gold_4 : set_comma(Func.sumGold(retRaid, 4)) + "G",
+
+                nickName_5 : Func.getMemberName(myCharacter,5),
+                gold_5 : set_comma(Func.sumGold(retRaid, 5)) + "G",
+
+                totalGold: set_comma((Func.sumGold(retRaid, 0) || 0) + (Func.sumGold(retRaid, 1) || 0) + (Func.sumGold(retRaid, 2) || 0) + (Func.sumGold(retRaid, 3) || 0) + (Func.sumGold(retRaid, 4) || 0) +  (Func.sumGold(retRaid, 5) || 0)) + "G"
+            }
+            KakaoLinkModule.send(114314,args,room);
         }
         else if(param == '경매장'){ // 보석
             if(isNaN(str)){

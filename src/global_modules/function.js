@@ -49,6 +49,31 @@ module.exports.GEMINDEX = {
     "1겁": "1레벨 겁화의 보석", "1작": "1레벨 작열의 보석"
 };
 
+module.exports.RAID = [
+    { raidName: "발탄", difficulty: "노말", levelRequirement: 1415, reward: 1200 },
+    { raidName: "발탄", difficulty: "하드", levelRequirement: 1445, reward: 1800 },
+    { raidName: "비아키스", difficulty: "노말", levelRequirement: 1430, reward: 1600 },
+    { raidName: "비아키스", difficulty: "하드", levelRequirement: 1460, reward: 2400 },
+    { raidName: "쿠크", difficulty: "노말", levelRequirement: 1475, reward: 3000 },
+    { raidName: "몽아", difficulty: "노말", levelRequirement: 1490, reward: 3000 },
+    { raidName: "몽아", difficulty: "하드", levelRequirement: 1540, reward: 3600 },
+    { raidName: "카양겔", difficulty: "노말", levelRequirement: 1540, reward: 3600 },
+    { raidName: "카양겔", difficulty: "하드", levelRequirement: 1580, reward: 4800 },
+    { raidName: "일리아칸", difficulty: "노말", levelRequirement: 1580, reward: 5400 },
+    { raidName: "일리아칸", difficulty: "하드", levelRequirement: 1600, reward: 7500 },
+    { raidName: "상아탑", difficulty: "노말", levelRequirement: 1600, reward: 6500 },
+    { raidName: "상아탑", difficulty: "하드", levelRequirement: 1620, reward: 13000 },
+    { raidName: "카멘", difficulty: "노말", levelRequirement: 1610, reward: 13000 },
+    { raidName: "카멘", difficulty: "하드", levelRequirement: 1630, reward: 20000 },
+    { raidName: "에키드나", difficulty: "노말", levelRequirement: 1620, reward: 14500 },
+    { raidName: "에키드나", difficulty: "하드", levelRequirement: 1640, reward: 18500 },
+    { raidName: "베히모스", difficulty: "노말", levelRequirement: 1640, reward: 21500 },
+    { raidName: "에기르", difficulty: "노말", levelRequirement: 1660, reward: 23000 },
+    { raidName: "에기르", difficulty: "하드", levelRequirement: 1680, reward: 27500 },
+    { raidName: "아브", difficulty: "노말", levelRequirement: 1670, reward: 25000 },
+    { raidName: "아브", difficulty: "하드", levelRequirement: 1690, reward: 30500 }
+];
+
 module.exports.BOOKINDEX = {"저받":"저주받은 인형", "예둔":"예리한 둔기","아드":"이드레날린","타대":"타격의 대가","결대":"결투의 대가","기습":"기습의 대가","돌대":"돌격대장"};
 
 module.exports.STUFFINDEX = ['찬란한 명예의 돌파석','정제된 파괴강석','정제된 수호강석'];
@@ -141,6 +166,46 @@ module.exports.getMemberJob = (sortedMembers, index) => {
     return job;
 }
 
+// 최상단 3개의 레이드 계산 함수 (중복 제거)
+module.exports.getTop3UniqueRaidsForMember = (member) => {
+    // 레이드 데이터
+    const raids = Func.RAID;
+
+    const memberLevel = member.maxItemLevel;
+
+    // 레벨 제한 만족하는 레이드 필터링
+    const availableRaids = raids.filter(raid => memberLevel >= raid.levelRequirement);
+
+    // 중복 레이드명을 제거하면서 보상이 높은 항목만 유지
+    const uniqueRaids = [];
+    const seenRaidNames = new Set();
+
+    availableRaids
+        .sort((a, b) => b.reward - a.reward) // 보상 기준으로 정렬
+        .forEach(raid => {
+            if (!seenRaidNames.has(raid.raidName)) {
+                uniqueRaids.push(raid);
+                seenRaidNames.add(raid.raidName);
+            }
+        });
+
+    // 상위 3개 선택
+    return uniqueRaids.slice(0, 3);
+}
+
+module.exports.sumGold = (raid, index) => {
+    // raid[index]가 유효한 배열인지 확인
+    if (!Array.isArray(raid[index]) || raid[index].length < 3) {
+        return 0; // 기본값 반환
+    }
+
+    // reward 속성이 있는지 확인하고 합산
+    const reward1 = raid[index][0] && raid[index][0].reward ? raid[index][0].reward : 0;
+    const reward2 = raid[index][1] && raid[index][1].reward ? raid[index][1].reward : 0;
+    const reward3 = raid[index][2] && raid[index][2].reward ? raid[index][2].reward : 0;
+
+    return reward1 + reward2 + reward3;
+};
 // 이미지 출력 함수
 module.exports.makeImg = (url,title,desc) => { 
 

@@ -15,6 +15,10 @@ const Func = require('function');
  */
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
     
+    if(!room.includes("KM")) {
+        return;
+    }
+
     if(msg.startsWith(".")){
         let cmd = msg.slice(1);
         var cmdArr = cmd.split(' ');
@@ -84,13 +88,13 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         //     }         
         // }
         if(param == '주급'){
-            let nickName = msg.substr(cmdArr[0].length + 1).trim();
-            if(isNaN(nickName)){
-                replier.reply(getCalWeekGold(nickName));
-            }
-            else{
-                replier.reply('잘못된 명령어 입니다.');
-            }       
+            // let nickName = msg.substr(cmdArr[0].length + 1).trim();
+            // if(isNaN(nickName)){
+            //     replier.reply(getCalWeekGold(nickName));
+            // }
+            // else{
+            //     replier.reply('잘못된 명령어 입니다.');
+            // }       
         }
         if(param == '거래소'){ // 각인서 , 재료 등
             let itemName = msg.substr(cmdArr[0].length + 1).trim();
