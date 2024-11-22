@@ -17,12 +17,12 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         return;
     }
     
-    let cmd = msg.slice(1);
-    var cmdArr = cmd.split(' ');
-    let param = cmdArr[0];
-    let str = msg.substr(cmdArr[0].length + 1).trim();
-
+    
     if(msg.startsWith(".")){
+        let cmd = msg.slice(1);
+        var cmdArr = cmd.split(' ');
+        let param = cmdArr[0];
+        let str = msg.substr(cmdArr[0].length + 1).trim();
         if(param == '장비'){
             java.lang.Thread.sleep(1000);
             var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();

@@ -195,7 +195,7 @@ module.exports.getTop3UniqueRaidsForMember = (member) => {
 
 module.exports.sumGold = (raid, index) => {
     // raid[index]가 유효한 배열인지 확인
-    if (!Array.isArray(raid[index]) || raid[index].length < 3) {
+    if (!Array.isArray(raid[index])) {
         return 0; // 기본값 반환
     }
 

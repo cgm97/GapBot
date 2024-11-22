@@ -13,7 +13,7 @@ const cookies = service.login({
 
 client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
 
-module.exports.kakaoLink = (templateId,templateArgs,room) => { 
+module.exports.send = (templateId,templateArgs,room) => { 
 
     try {
         client.sendLink(room, {

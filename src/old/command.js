@@ -1,6 +1,6 @@
 const Func = require('function');
 const scriptName = "command";
-
+const KakaoLinkModule = require('KakaoLinkModule');
 /**
  * (string) room
  * (string) sender
@@ -32,9 +32,10 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             retMsg += '\n.장신구 닉네임 : 입력된 캐릭터의 장신구정보를 조회합니다.';
             // retMsg += '\n.아바타 닉네임 : 입력된 캐릭터의 아바타 이미지를 조회합니다.';
             retMsg += '\n.내실 닉네임 : 입력된 캐릭터의 내실현황을 조회합니다.';
-            // retMsg += '\n.부캐 닉네임 : 입력된 캐릭터의 부캐릭터 정보들을 조회합니다.';
+            retMsg += '\n.부캐 닉네임 : 입력된 캐릭터의 부캐릭터 정보들을 조회합니다.';
             retMsg += '\n.보석 닉네임 : 입력된 캐릭터의 보석정보를 조회합니다.';
-            // retMsg += '\n.주급 닉네임 : 입력된 캐릭터의 서버에 해당되는 상위 6개 캐릭터의 주간 골드를 합산하여 보여줍니다.';
+            retMsg += '\n.주급 닉네임 : 입력된 캐릭터의 서버에 해당되는 상위 6개 캐릭터의 주간 골드를 합산하여 보여줍니다.';
+            retMsg += '\n.앜패 닉네임 : 입력된 캐릭터의 아크패시브 정보를 조회합니다.';
             retMsg += '\n.떠상 서버명 : 입력된 서버의 현재 떠돌이 상인 정보를 조회합니다.' ;
             retMsg += '\n.분배금 1000 or ㅂㅂㄱ 1000 : 최적의 경매 입찰가를 계산합니다.';
             retMsg += '\n.모험섬 : 금일 모험섬 정보를 조회합니다.';
@@ -82,7 +83,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             
             retMsg += '\n\n';
             // retMsg += '개발자 후원\nhttps://toss.me/gapbot';
-            replier.reply(retMsg);
+            // replier.reply(retMsg);
+            KakaoLinkModule.send(114479,{},room);
         }
     }
 

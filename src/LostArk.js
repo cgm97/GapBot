@@ -300,15 +300,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
             myCharacter.forEach(myCharacter => {
                 const top3Raids = Func.getTop3UniqueRaidsForMember(myCharacter);
                 retRaid.push(top3Raids);
-                // replier.reply(myCharacter.name);
-                // if (top3Raids.length > 0) {
-                //     top3Raids.forEach(raid => {
-                //         replier.reply(raid.raidName + raid.difficulty + raid.reward);
-                //     });
-                // } else {
-                //     replier.reply("  - No available raids");
-                // }
-                // replier.reply("\n");
             });
             var args = {
                 nickName_0 : Func.getMemberName(myCharacter,0),
@@ -332,6 +323,53 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
                 totalGold: set_comma((Func.sumGold(retRaid, 0) || 0) + (Func.sumGold(retRaid, 1) || 0) + (Func.sumGold(retRaid, 2) || 0) + (Func.sumGold(retRaid, 3) || 0) + (Func.sumGold(retRaid, 4) || 0) +  (Func.sumGold(retRaid, 5) || 0)) + "G"
             }
             KakaoLinkModule.send(114314,args,room);
+        }
+        else if(param == '앜패'){
+            var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+            var characterInfo = JSON.parse(croll);
+
+            var arkPassive = characterInfo.arkPassive;
+            if(!arkPassive.enabled){
+                replier.reply('아크패시브 비활성화 캐릭입니다.');
+                return ;
+            }
+            else{
+                var effects = arkPassive.effects;
+
+                // 구분된 데이터를 저장할 객체
+                var evolution = []  // 진화
+                var realization = [] // 깨달음
+                var leap = []        // 도약
+                
+
+                for(var i=0; i < effects.length; i++){
+                    if(effects[i].type == 1){
+                        evolution.push(effects[i]);
+                    }
+                    else if(effects[i].type == 2){
+                        realization.push(effects[i]);
+                    }
+                    else if(effects[i].type == 3){
+                        leap.push(effects[i]);
+                    }
+                }
+
+                var retText = "";
+                retText += '📢 '+str+ ' 님의 아크패시브\n\n';
+                retText += "진화 \n"
+                evolution.forEach(effect => {
+                    retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+                })
+                retText += "깨달음 \n"
+                realization.forEach(effect => {
+                    retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+                })
+                retText += "도약 \n"
+                leap.forEach(effect => {
+                    retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+                })
+                replier.reply(retText);
+            }
         }
         else if(param == '경매장'){ // 보석
             if(isNaN(str)){
