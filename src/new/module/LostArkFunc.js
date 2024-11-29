@@ -196,6 +196,26 @@ module.exports.selectCharacterInfo = (client,characterInfo,room) => {
     var weapon_point = (characterInfo.equipments.weapon && characterInfo.equipments.weapon.transcendence && characterInfo.equipments.weapon.transcendence.point) || "";
 
     var elixir = (characterInfo.equipments.elixirSetEffects && Array.isArray(characterInfo.equipments.elixirSetEffects) && characterInfo.equipments.elixirSetEffects[0] && characterInfo.equipments.elixirSetEffects[0].name) || "";
+    var elixirSetEffects = characterInfo.equipments.elixirSetEffects;
+
+    var elixirText = "";
+    elixirSetEffects.forEach(i => {
+        elixirText += i.name; // 이름 추가
+    
+        // 마지막 활성화된 단계만 추출
+        var lastEnabledPhase = null;
+        i.phases.forEach(j => {
+            if (j.enabled) {
+                lastEnabledPhase = j.phase; // 활성화된 단계가 있을 경우 저장
+            }
+        });
+    
+        // 마지막 활성화된 단계만 추가
+        if (lastEnabledPhase !== null) {
+            elixirText += "("+lastEnabledPhase + "단계)";
+        }
+    });
+
     var total_point = hat_point + ornaments_point + top_point + pants_point + gloves_point + weapon_point;
 
     var args = {
@@ -216,7 +236,7 @@ module.exports.selectCharacterInfo = (client,characterInfo,room) => {
         realization: (characterInfo.arkPassive && characterInfo.arkPassive.realization) || "",
         leap: (characterInfo.arkPassive && characterInfo.arkPassive.leap) || "",
         elixirNpointTitle: (elixir && total_point) ? "엘/초" : "",
-        elixirNpointData: (elixir && total_point) ? elixir + " / " + total_point : ""
+        elixirNpointData: (elixir && total_point) ? elixirText + " / " + total_point : ""
     };
     KakaoLinkModule.send(client,114159,args,room);
 }
