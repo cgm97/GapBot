@@ -75,7 +75,7 @@ module.exports.RAID = [
     { raidName: "아브", difficulty: "하드", levelRequirement: 1690, reward: 30500 }
 ];
 
-module.exports.BOOKINDEX = {"저받":"저주받은 인형", "예둔":"예리한 둔기","아드":"이드레날린","타대":"타격의 대가","결대":"결투의 대가","기습":"기습의 대가","돌대":"돌격대장"};
+module.exports.BOOKINDEX = {"저받":"저주받은 인형", "예둔":"예리한 둔기","아드":"아드레날린","타대":"타격의 대가","결대":"결투의 대가","기습":"기습의 대가","돌대":"돌격대장"};
 
 module.exports.STUFFINDEX = ['찬란한 명예의 돌파석','정제된 파괴강석','정제된 수호강석'];
 
