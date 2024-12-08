@@ -154,12 +154,12 @@ function onMessage(msg) {
         msg.reply('잘못된 명령어 입니다.');
       }        
     }
-    if(param == '크리스탈'){
+    else if(param == '크리스탈'){
       var min = JSON.parse(org.jsoup.Jsoup.connect("https://loatool.taeu.kr/api/crystal-history/ohlc/1mon").ignoreContentType(true).get().text());
       var hour = JSON.parse(org.jsoup.Jsoup.connect("https://loatool.taeu.kr/api/crystal-history/ohlc/1h").ignoreContentType(true).get().text());
       msg.reply(lostArkFunc.getCrystal(min,hour));     
     }
-    if(param == '보석'){
+    else if(param == '보석'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -172,6 +172,48 @@ function onMessage(msg) {
       else {
         msg.reply('잘못된 명령어 입니다.');
       }              
+    }
+    else if(param == '사사게'){
+      if(str == ""){
+        txt = "검색 키워드를 입력하세요.";
+        msg.reply(txt);
+        return;
+      }
+      var croll = org.jsoup.Jsoup.connect("https://www.inven.co.kr/board/lostark/5355?query=list&p=1&sterm=&name=subjcont&keyword="+str).ignoreContentType(true).get();
+      var rows  = croll.select("#new-board > form > div > table > tbody > tr:not(.notice)");
+
+      const rawHtml = String(rows.select(".tit a"));
+      // <a class="subject-link" 태그로 분리
+      const links = rawHtml.split('<a class="subject-link"').slice(1); // 첫 번째 빈 항목 제거
+
+      var txt = ""
+
+      if(links.length < 1){
+        txt = "검색 결과가 없습니다.";
+      } else{
+        txt = str + "님의 사사게 검색 결과 (제목+내용)\n"+'\u200b'.repeat(501);
+
+        var i=0;
+        links.forEach(link => {
+          // href 추출
+          const hrefStart = link.indexOf('href="') + 6; // "href=" 이후 위치
+          const hrefEnd = link.indexOf('"', hrefStart);
+          const href = link.substring(hrefStart, hrefEnd);
+  
+          // category 추출
+          const categoryStart = link.indexOf('<span class="category">[') + 24; // "[카테고리]" 안쪽
+          const categoryEnd = link.indexOf(']</span>', categoryStart);
+          const category = link.substring(categoryStart, categoryEnd);
+  
+          // title 추출
+          const titleStart = link.indexOf(']</span>') + 8; // 제목 시작 위치
+          const titleEnd = link.indexOf('</a>', titleStart);
+          const title = link.substring(titleStart, titleEnd).trim();
+
+          txt += "\n["+category+"] "+title+"\n"+href;
+        });
+      }
+      msg.reply(txt);
     }
 
   }
