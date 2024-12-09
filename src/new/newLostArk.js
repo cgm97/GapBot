@@ -14,6 +14,8 @@ const cookies = service.login({
 }).awaitResult();
 
 client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
+
+const dataFile = "refiningDB"; // 재련DB
 /**
  * (string) msg.content: 메시지의 내용
  * (string) msg.room: 메시지를 받은 방 이름
@@ -252,11 +254,139 @@ function onCommand(msg) {
       msg.reply(lostArkFunc.lotto(msg.author.name, 0, data));         
     }
   }
+  else if(cmd == "재련"){
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
+    var hours = ('0' + today.getHours()).slice(-2); 
+    var minutes = ('0' + today.getMinutes()).slice(-2);
+    var seconds = ('0' + today.getSeconds()).slice(-2); 
+    
+    var dateString = year + '-' + month  + '-' + day;
+    var timeString = hours + ':' + minutes  + ':' + seconds;
+    
+    var currentDate = dateString +' '+ timeString;
+
+    if (!Database.exists(dataFile)) {
+      Database.writeObject(dataFile, {});
+    }
+    
+    let data = Database.readObject(dataFile); // 전체 데이터 로드
+      
+    // 현재 메시지의 채널 ID 가져오기
+    var channelId = msg.channelId;
+    
+    // 해당 채널 ID가 없으면 빈 배열로 초기화
+    if (!data[channelId]) {
+        data[channelId] = [];
+    }
+    
+    // 현재 채널의 유저 데이터 배열
+    var nowRoom = data[channelId];
+    
+    // 유저 ID 생성 (hash 값이 있으면 사용, 없으면 이름 사용)
+    var userId = msg.author.hash ? msg.author.hash : msg.author.name;
+    
+    // 해당 유저가 채널에 없으면 새로 추가
+    if (!nowRoom.find(e => e.userId === userId)) {
+        const info = {
+            "userName": msg.author.name,
+            "userId": userId,
+            "step": 1,
+            "bonus": 0,
+            "lastChat": null,
+            "sucStep": null
+        };
+        nowRoom.push(info);
+    }
+    
+    // 유저 정보 업데이트 (예: 마지막 채팅 시간 업데이트)
+    var user = nowRoom.find(e => e.userId === userId);
+
+    const currentStep = user.step;
+    const nextStep = currentStep + 1;
+
+    // 현재 단계 데이터 확인
+    const nextData = Data.ENHANCEMENTDATA.find(e => e.step === nextStep);
+
+    if (!nextData) {
+        msg.reply(msg.author.name+"님은 이미 최대 강화 25단계에 도달했습니다.");
+        return;
+    }
+    else{
+
+      if(user.lastChat != null){
+        var baseTime = 2 * 60 * 1000; // 2분
+        
+        var nowDate = lostArkFunc.toDate(currentDate);
+        var lastChatDate = lostArkFunc.toDate(user.lastChat);
+    
+        var checkTime = nowDate - lastChatDate;
+        
+        if(checkTime < baseTime) { 
+          var remainingTime = (baseTime) - checkTime; // 남은 시간 = 2분 - 경과 시간
+          // 분과 초로 변환
+          var minutes = Math.floor(remainingTime / 60000); // 전체 분
+          var seconds = Math.floor((remainingTime % 60000) / 1000); // 나머지를 초로 변환
+          msg.reply(msg.author.name + "님 현재 재련 쿨타임입니다.\n남은시간 : " + 
+                  (minutes > 0 ? minutes + "분 " : "") + // 분이 0보다 크면 분 출력, 아니면 생략
+                  (seconds + "초")); // 초는 항상 출력
+          return ;
+        }
+      }
+
+      msg.reply(msg.author.name+"님 강화를 시작합니다...!\n성공확률: " + nextData.chance + "%");
+      java.lang.Thread.sleep(1000);
+    }
+
+    // 강화 확률 계산
+    let successChance = nextData.chance;
+
+    // 강화 시도
+    const randomValue = Math.random() * 100; // 0~100 사이의 난수
+    if (randomValue < successChance || user.bonus == 100) {
+        // 강화 성공
+        user.step = nextStep;
+        user.bonus = 0; // 장인의 기운 초기화
+        user.sucStep = currentDate;
+        msg.reply(msg.author.name+"님 강화 성공!\n현재 단계: " + user.step);
+    } else {
+        // 강화 실패
+        user.bonus += nextData.bonusChance; // 장인의 기운 추가
+        if(user.bonus > 100){
+          user.bonus = 100;
+        }
+        msg.reply(msg.author.name+"님 강화 실패!\n현재 단계: " + user.step + "\n장인의 기운: "+user.bonus.toFixed(2)+"%");
+    }
+    user.lastChat = currentDate;
+    user.userName = msg.author.name; // 닉변유저 체크 (안드버전9이상만 작동)
+    // 업데이트된 채널 데이터를 다시 저장
+    data[channelId] = nowRoom;
+    
+    // JSON 데이터를 파일에 저장
+    Database.writeObject(dataFile, data);
+    // 결과 JSON 출력
+    // msg.reply(JSON.stringify(data, null, 2)); // 보기 쉽게 들여쓰기 추가
+  }
+  else if(cmd=='재련랭킹'){
+    let data = Database.readObject(dataFile); // 전체 데이터 로드
+    // 현재 채널의 유저 데이터 배열
+    var nowRoom = data[msg.channelId];
+    const rank = nowRoom.sort((a,b)=> b.step-a.step || a.sucStep-b.sucStep).map((v,i)=>(i+1)+"위 : "+v.userName+" 강화단계 : "+v.step);
+    var _return="[ 재련 랭킹 ]\n\n";
+    for(var i in rank){
+      _return+=rank[i]+"\n";
+      if(i==4){
+        _return+="\u200b".repeat(501);
+      }
+    }
+    msg.reply(_return); 
+  }
 
 }
 bot.setCommandPrefix("/"); //@로 시작하는 메시지를 command로 판단
 bot.addListener(Event.COMMAND, onCommand);
-
 
 function onCreate(savedInstanceState, activity) {
   var textView = new android.widget.TextView(activity);

@@ -81,6 +81,36 @@ module.exports.BOOKINDEX = {"저받":"저주받은 인형", "예둔":"예리한 
 
 module.exports.STUFFINDEX = ['찬란한 명예의 돌파석','정제된 파괴강석','정제된 수호강석'];
 
+// 재련강화확률표
+module.exports.ENHANCEMENTDATA = [
+    { step: 1, chance: 100, bonusChance: 100 },
+    { step: 2, chance: 100, bonusChance: 100 },
+    { step: 3, chance: 50, bonusChance: 27.91 },
+    { step: 4, chance: 50, bonusChance: 27.91 },
+    { step: 5, chance: 30, bonusChance: 18.60 },
+    { step: 6, chance: 30, bonusChance: 18.60 },
+    { step: 7, chance: 20, bonusChance: 13.95 },
+    { step: 8, chance: 20, bonusChance: 13.95 },
+    { step: 9, chance: 15, bonusChance: 11.63 },
+    { step: 10, chance: 15, bonusChance: 11.63 },
+    { step: 11, chance: 10, bonusChance: 9.30 },
+    { step: 12, chance: 10, bonusChance: 9.30 },
+    { step: 13, chance: 10, bonusChance: 9.30 },
+    { step: 14, chance: 5, bonusChance: 4.65 },
+    { step: 15, chance: 4, bonusChance: 1.86 },
+    { step: 16, chance: 4, bonusChance: 1.86 },
+    { step: 17, chance: 3, bonusChance: 1.40 },
+    { step: 18, chance: 3, bonusChance: 1.40 },
+    { step: 19, chance: 3, bonusChance: 1.40 },
+    { step: 20, chance: 1.5, bonusChance: 0.70 },
+    { step: 21, chance: 1.5, bonusChance: 0.70 },
+    { step: 22, chance: 1, bonusChance: 0.47 },
+    { step: 23, chance: 1, bonusChance: 0.47 },
+    { step: 24, chance: 0.5, bonusChance: 0.23 },
+    { step: 25, chance: 0.5, bonusChance: 0.23 }
+];
+
+
 // 장비 등급
 module.exports.getGradeName = (grade) => { 
     return grade == 7 ? "[에스더]" : 
@@ -216,6 +246,7 @@ module.exports.sumGold = (raid, index) => {
 
     return reward1 + reward2 + reward3;
 };
+
 // 이미지 출력 함수
 module.exports.makeImg = (url,title,desc) => { 
 

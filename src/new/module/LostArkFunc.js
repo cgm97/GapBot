@@ -666,3 +666,19 @@ module.exports.exportImg = (client,url,text,room) => {
     };
     KakaoLinkModule.send(client,114599,args,room);
 }
+
+// 시간계산
+module.exports.toDate = (dateTimeStr) => {
+    var parts = dateTimeStr.split(" "); // 날짜와 시간을 분리
+    var dateParts = parts[0].split("-"); // 날짜를 분리 (YYYY-MM-DD)
+    var timeParts = parts[1].split(":"); // 시간을 분리 (HH:mm:ss)
+
+    return new Date(
+        parseInt(dateParts[0]), // 년
+        parseInt(dateParts[1]) - 1, // 월 (0부터 시작하므로 -1 필요)
+        parseInt(dateParts[2]), // 일
+        parseInt(timeParts[0]), // 시
+        parseInt(timeParts[1]), // 분
+        parseInt(timeParts[2]) // 초
+    );
+}
