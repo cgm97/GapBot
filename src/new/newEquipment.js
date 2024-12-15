@@ -89,7 +89,6 @@ function onMessage(msg) {
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       var characterInfo = JSON.parse(croll);
 
-      java.lang.Thread.sleep(1000);
       lostArkFunc.selectCharacterEquip2(client, characterInfo,msg.room);
     }
   }
