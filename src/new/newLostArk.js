@@ -107,6 +107,54 @@ function onMessage(msg) {
 
       lostArkFunc.selectMembers(client,characterInfo,str,msg.room);
     }
+    else if(param == '원정대'){
+      var data;
+      var url = "https://developer-lostark.game.onstove.com/characters/"+str+"/siblings";
+      data = org.jsoup.Jsoup.connect(url)
+      .header("accept", "application/json")
+      .header("authorization", API.LOA_KEY)
+      .header("Content-Type", "application/json")
+      .ignoreHttpErrors(true)        
+      .ignoreContentType(true) 
+      .get()
+      .text();
+      data = JSON.parse(data);
+   
+      var retTxt = "📢 "+ str+"님의 원정대";
+      if(data.length > 1){
+        data.sort((a, b) => {
+          // 1. ServerName을 기준으로 정렬 (오름차순)
+          const serverComparison = a.ServerName.localeCompare(b.ServerName);
+          if (serverComparison !== 0) {
+              return serverComparison;
+          }
+        });
+  
+        // 최대 길이 계산
+        const maxClassLength =  Math.max.apply(null, data.map(item => String(item.CharacterClassName).length));
+        // 서버별 그룹화
+        const groupedData = data.reduce((acc, item) => {
+            acc[item.ServerName] = acc[item.ServerName] || [];
+            acc[item.ServerName].push(item);
+            return acc;
+        }, {});
+
+        // 출력
+        Object.keys(groupedData).forEach(ServerName => {
+          retTxt += "\n\n❙ "+ServerName; // 서버명 출력
+            groupedData[ServerName].sort((a, b) => Number(b.ItemMaxLevel.replace(/,/g, "")) - Number(a.ItemMaxLevel.replace(/,/g, "")));
+            groupedData[ServerName].forEach(({ CharacterClassName, ItemMaxLevel, CharacterName }) => {
+                const paddedClass = String(CharacterClassName).padEnd(maxClassLength, "　");
+                retTxt += "\n"+paddedClass + " "+ CharacterName + " ("+ItemMaxLevel+")";
+            });
+        });
+      } 
+      else{
+        retTxt = "검색 결과가 없습니다.";
+      }
+      msg.reply(retTxt);
+
+    }
     else if(param == '주급'){
       try{
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
@@ -336,8 +384,12 @@ function onCommand(msg) {
         }
       }
 
-      msg.reply(msg.author.name+"님 강화를 시작합니다...!\n성공확률: " + nextData.chance + "%");
-      java.lang.Thread.sleep(1000);
+      if(user.bonus == 100){
+        msg.reply(msg.author.name+"님 강화를 시작합니다...!\n성공확률: 100%(장기백ㅋ)");
+      }
+      else{
+        msg.reply(msg.author.name+"님 강화를 시작합니다...!\n성공확률: " + nextData.chance + "%");
+      }
     }
 
     // 강화 확률 계산
@@ -350,6 +402,7 @@ function onCommand(msg) {
         user.step = nextStep;
         user.bonus = 0; // 장인의 기운 초기화
         user.sucStep = currentDate;
+        
         msg.reply(msg.author.name+"님 강화 성공!\n현재 단계: " + user.step);
     } else {
         // 강화 실패
