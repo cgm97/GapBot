@@ -289,7 +289,18 @@ function onMessage(msg) {
       }
       msg.reply(txt);
     }
+    else if(param == '클골'){
+      var clearGold = Data.RAID;
 
+      var txt = "📢 레이드 클리어 골드"+'\u200b'.repeat(501)+"\n";
+      clearGold.forEach(raid =>{
+        txt += "\n"+raid.raidName+"("+raid.difficulty+") "+ lostArkFunc.set_comma(raid.reward)+"(-"+lostArkFunc.set_comma(raid.more)+")";
+        if(raid.week){
+          txt += "\n  └> 격주 "+ lostArkFunc.set_comma(raid.week)+"(-"+lostArkFunc.set_comma(raid.weekmore)+")";
+        }
+      });
+      msg.reply(txt);
+    }
   }
 }
 bot.addListener(Event.MESSAGE, onMessage);
