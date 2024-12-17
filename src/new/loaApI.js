@@ -32,6 +32,7 @@ const Data = require('data');
  * (bigint) msg.channelId: 각 방의 고유 id
  */
 function onMessage(msg) {
+
     if(msg.content.startsWith(".")){
         let cmd = msg.content.slice(1);
         var cmdArr = cmd.split(' ');
@@ -665,7 +666,29 @@ bot.addListener(Event.MESSAGE, onMessage);
  * (string) msg.command: 명령어 이름
  * (Array) msg.args: 명령어 인자 배열
  */
-function onCommand(msg) {}
+function onCommand(msg) {
+    if(msg.args[1] != "2"){
+        return;
+    }
+    if(msg.command == "컴파일"){
+        var ret = BotManager.compile(msg.args[0],true)
+        if(ret){
+            msg.reply("완료");
+        }
+        else{
+            msg.reply("실패");
+        }
+    }
+    if(msg.command == "컴파일확인"){
+        var ret = BotManager.isCompiled(msg.args[0])
+        if(ret){
+            msg.reply("활성화");
+        }
+        else{
+            msg.reply("비활성화");
+        }
+    }
+}
 bot.setCommandPrefix("@"); //@로 시작하는 메시지를 command로 판단
 bot.addListener(Event.COMMAND, onCommand);
 
