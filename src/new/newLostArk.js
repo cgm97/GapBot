@@ -75,6 +75,30 @@ function onMessage(msg) {
 
       msg.reply(lostArkFunc.selectCharacterAccessories(characterInfo,str));
     }
+    else if(param == '팔찌'){
+      try{
+        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      } catch(e){
+        msg.reply("존재하지 않는 캐릭터입니다.");
+      }
+      var characterInfo = JSON.parse(croll);
+      var bracelet = characterInfo.accessories.bracelet; // 팔찌
+
+      var retTxt = "📢 "+ str+"님의 팔찌\n";
+      // 팔찌
+      retTxt += '\n'+ Data.getGradeName(bracelet.grade) + ' '+ bracelet.name;
+      for(var i=0; i < bracelet.effects.length; i++){
+        if(bracelet.effects[i].value == -1){
+          retTxt += "\n＊ ";
+          retTxt += bracelet.effects[i].description;
+        }
+        else{
+          retTxt += "\n＊ ";
+          retTxt += bracelet.effects[i].name + bracelet.effects[i].value;
+        }
+      }
+      msg.reply(retTxt);
+    }
     else if(param == '내실'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/"+str+"/collection").ignoreContentType(true).get().text();

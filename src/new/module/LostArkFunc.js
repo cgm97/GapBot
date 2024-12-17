@@ -310,7 +310,7 @@ module.exports.selectCharacterAccessories = (characterInfo,str) => {
     var earring_2 = characterInfo.accessories.earring2; // 귀걸이
     var ring_1  = characterInfo.accessories.ring1; // 반지
     var ring_2 = characterInfo.accessories.ring2; // 반지
-    var bracelet = characterInfo.accessories.bracelet; // 팔찌
+    // var bracelet = characterInfo.accessories.bracelet; // 팔찌
 
     var retTxt = "📢 "+ str+"님의 장신구\n";
     // 장신구
@@ -321,11 +321,11 @@ module.exports.selectCharacterAccessories = (characterInfo,str) => {
     retTxt += Data.getAccessories(ring_2);
 
     // 팔찌
-    retTxt += '\n'+ Data.getGradeName(bracelet.grade) + ' '+ bracelet.name + '\n';
-    for(var i=0; i < bracelet.effects.length; i++){
-        retTxt += bracelet.effects[i].name||bracelet.effects[i].description;
-        retTxt += " ";
-    }
+    // retTxt += '\n'+ Data.getGradeName(bracelet.grade) + ' '+ bracelet.name + '\n';
+    // for(var i=0; i < bracelet.effects.length; i++){
+    //     retTxt += bracelet.effects[i].name||bracelet.effects[i].description;
+    //     retTxt += " ";
+    // }
     return retTxt;
 }
 // 캐릭터 내실
