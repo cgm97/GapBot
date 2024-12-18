@@ -170,9 +170,9 @@ module.exports.getAccessories = (item) => {
 }
 
 // 내실 정보
-module.exports.getCollection = (item) => {
-    const score = Math.floor((item.value / item.max_value) * 100);
-    const result = '▶️ ' + item.name + ' [' + item.value + ' / ' + item.max_value + '] ' + score + '%\n';
+module.exports.getCollection = (item, name) => {
+    const score = Math.floor((item.value / item.maxValue) * 100);
+    const result = '▶️ ' + name + ' [' + item.value + ' / ' + item.maxValue + '] ' + score + '%\n';
     
     const output = {}; // 빈 객체 생성
     output.result = result; // result 속성 추가

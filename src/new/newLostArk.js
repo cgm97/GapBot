@@ -101,7 +101,7 @@ function onMessage(msg) {
     }
     else if(param == '내실'){
       try{
-        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/"+str+"/collection").ignoreContentType(true).get().text();
+        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/"+str+"/collectibles").ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
@@ -235,7 +235,7 @@ function onMessage(msg) {
     }
     else if(param == '보석'){
       try{
-        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/character/" + str).ignoreContentType(true).get().text();
+        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
         return msg.reply('존재하지 않는 캐릭터입니다.');
       }
@@ -294,7 +294,7 @@ function onMessage(msg) {
 
       var txt = "📢 레이드 클리어 골드"+'\u200b'.repeat(501)+"\n";
       clearGold.forEach(raid =>{
-        txt += "\n"+raid.raidName+"("+raid.difficulty+") "+ lostArkFunc.set_comma(raid.reward)+"(-"+lostArkFunc.set_comma(raid.more)+")";
+        txt += "\nLv."+raid.levelRequirement+" "+raid.raidName+"("+raid.difficulty+") "+ lostArkFunc.set_comma(raid.reward)+"(-"+lostArkFunc.set_comma(raid.more)+")";
         if(raid.week){
           txt += "\n  └> 격주 "+ lostArkFunc.set_comma(raid.week)+"(-"+lostArkFunc.set_comma(raid.weekmore)+")";
         }

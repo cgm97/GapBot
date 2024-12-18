@@ -330,16 +330,16 @@ module.exports.selectCharacterAccessories = (characterInfo,str) => {
 }
 // 캐릭터 내실
 module.exports.selectCharacterCollection = (characterInfo,str) => {
-    var island_heart = Data.getCollection(characterInfo.island_heart);
-    var giant_heart = Data.getCollection(characterInfo.giant_heart);
-    var ignea_token = Data.getCollection(characterInfo.ignea_token);
-    var masterpiece = Data.getCollection(characterInfo.masterpiece);
-    var memory_orgel = Data.getCollection(characterInfo.memory_orgel);
-    var mokoko_seed = Data.getCollection(characterInfo.mokoko_seed);
-    var orpheus_star = Data.getCollection(characterInfo.orpheus_star);
-    var sea_bounty = Data.getCollection(characterInfo.sea_bounty);
-    var world_tree_leaf = Data.getCollection(characterInfo.world_tree_leaf);
-    var crimsnail_chart = Data.getCollection(characterInfo.crimsnail_chart);
+    var island_heart = Data.getCollection(characterInfo.islandHeart,"섬의 마음");
+    var giant_heart = Data.getCollection(characterInfo.giantHeart,"거인의 심장");
+    var ignea_token = Data.getCollection(characterInfo.igneaToken,"이그네아의 징표");
+    var masterpiece = Data.getCollection(characterInfo.masterpiece,"위대한 미술품");
+    var memory_orgel = Data.getCollection(characterInfo.memoryOrgel,"기억의 오르골");
+    var mokoko_seed = Data.getCollection(characterInfo.mokokoSeed,"모코코 씨앗");
+    var orpheus_star = Data.getCollection(characterInfo.orpheusStar,"오르페우스의 별");
+    var sea_bounty = Data.getCollection(characterInfo.seaBounty,"항해 모험물");
+    var world_tree_leaf = Data.getCollection(characterInfo.worldTreeLeaf,"세계수의 잎");
+    var crimsnail_chart = Data.getCollection(characterInfo.crimsnailChart,"크림스네일의 해도");
 
     var avg_score = (
         island_heart.score 
@@ -616,7 +616,7 @@ module.exports.getCrystal = (min,hour) => {
 
 // 보석
 module.exports.getUserGem = (nickName,infoJson) => {   
-    var jewel_Key = Object.keys(infoJson.jewels);
+    var jewel_Key = infoJson.jewels;
 
     var bodyText = '';
     var powerGemCnt = 0;
@@ -624,19 +624,16 @@ module.exports.getUserGem = (nickName,infoJson) => {
 
     var jewel_arr = []; // 보석 배열 정렬 용 (내림차순)
     for(var i=0; i < jewel_Key.length; i++){
-        if(infoJson.jewels[jewel_Key[i]].cooldown != null){      
-            // 7레벨 홍염의 보석 [스킬이름] 
-            jewel_arr.push({"name":infoJson.jewels[jewel_Key[i]].cooldown.name + ' ['+infoJson.jewels[jewel_Key[i]].cooldown.skill +']',
-                            "level": infoJson.jewels[jewel_Key[i]].cooldown.level
-                            });
+        if(jewel_Key[i].type == 2){      
             coolGemCnt++;
         }
-        if(infoJson.jewels[jewel_Key[i]].damage != null){     
-            jewel_arr.push({"name":infoJson.jewels[jewel_Key[i]].damage.name + ' ['+infoJson.jewels[jewel_Key[i]].damage.skill +']',
-                            "level": infoJson.jewels[jewel_Key[i]].damage.level
-                            }); 
+        if(jewel_Key[i].type == 1){     
             powerGemCnt++;
         }
+        // 7레벨 홍염의 보석 [스킬이름] 
+        jewel_arr.push({"name":jewel_Key[i].name + ' ['+jewel_Key[i].skill +']',
+            "level": jewel_Key[i].level
+        });
     }
 
     var headText = '';
@@ -646,13 +643,13 @@ module.exports.getUserGem = (nickName,infoJson) => {
         headText += '장착된 보석이 없습니다.';
     }
     else{
-        headText += '멸화 ['+powerGemCnt+'개] 홍염 ['+coolGemCnt+'개]\n\n';
+        headText += '멸화 ['+powerGemCnt+'개] 홍염 ['+coolGemCnt+'개]\n';
     }
 
     jewel_arr.sort((a,b) => b.level - a.level); // 내림차순
 
     for(var i=0; i<jewel_arr.length; i++){
-        bodyText += jewel_arr[i].name + '\n';
+        bodyText += '\n'+jewel_arr[i].name;
     }
 
     return headText + bodyText;
