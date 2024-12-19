@@ -41,6 +41,7 @@ function onMessage(msg) {
 
         if(param == '경매장'){ // 보석
             try{
+                str = cmdArr.slice(1).join(' '); // 두 번째 요소부터 결합하여 문자열로 만듦
                 var args = getPriceAuctionItem(str);
 
                 var text = "📢 "+args.itemName+"\n";
@@ -53,17 +54,30 @@ function onMessage(msg) {
         }
         if(param == '거래소'){ // 각인서
             try{
-                str = value = Data.BOOKINDEX[str] || str;
+                str = cmdArr.slice(1).join(' '); // 두 번째 요소부터 결합하여 문자열로 만듦
+                str = Data.BOOKINDEX[str] || str;
                 var data = getPriceMarketItem(str);
                 
-                if (data.Items && data.Items[0]) {
-                    var itemName = data.Items[0].Name;
-                    
-                    var text = "📢 "+itemName+" 최저가\n";
-                    data.Items.forEach((Item) => {
-                        text +="\n"+Item.Grade + " " + set_comma(Item.RecentPrice);
-                    });
-
+                if (data.Items && data.Items.length > 0) {
+                    // Name별로 데이터를 그룹화
+                    const groupedItems = data.Items.reduce((acc, item) => {
+                        if (!acc[item.Name]) {
+                            acc[item.Name] = [];
+                        }
+                        acc[item.Name].push(item);
+                        return acc;
+                    }, {});   
+                    let text = "📢 각인서 최저가";
+                
+                    // 그룹화된 데이터를 처리
+                    for (var itemName in groupedItems) {
+                        if (groupedItems.hasOwnProperty(itemName)) {
+                            text += "\n\n❙ "+itemName;
+                            groupedItems[itemName].forEach((item) => {
+                                text += '\n'+item.Grade + ' ' + set_comma(item.RecentPrice);
+                            });
+                        }
+                    }
                     msg.reply(text);
                 } else {
                     msg.reply("잘못된 아이템 명이거나 존재하지 않습니다.");
@@ -99,7 +113,7 @@ function onMessage(msg) {
                 }
                 itemLv = 1680;
             }
-            else if(type == "유물"){
+            if(type == "유물"){
                 if(count == 3){
                     point = 10;
                 }
@@ -115,10 +129,10 @@ function onMessage(msg) {
                 }
                 itemLv = 1640;
             }
-            else{
-                msg.reply("명령어를 확인해주세요.\n올바른 명령어 : .시세 상 고대 연마단계(1~3)");
-                return;
-            }
+            // else{
+            //     msg.reply("명령어를 확인해주세요.\n올바른 명령어 : .시세 상 고대 연마단계(1~3)");
+            //     return;
+            // }
 
             if(str == '상'){
                 msg.reply("시세 " + str + " 검색중...");
@@ -134,7 +148,7 @@ function onMessage(msg) {
                     text += "적주피%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,42,12,point), count))+"\n";
                     text += "추가피해%: " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,41,11,point), count))+"\n";
                     text += "낙인력%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,44,12,point), count))+"\n";
-                    text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,12,point), count))+"\n";
+                    // text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,12,point), count))+"\n";
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions(7,45,12,point-1), count))+"\n";
@@ -182,7 +196,7 @@ function onMessage(msg) {
                     text += "적주피% + 추가피해% : " +  getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,42,41,12,9,point), count))+"\n";
                     text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,41,42,11,10,point), count))+"\n";
                     text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,44,43,12,10,point), count))+"\n";
-                    text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,10,point), count))+"\n";
+                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,10,point), count))+"\n";
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,45,46,12,10,point-1), count))+"\n";
@@ -209,7 +223,7 @@ function onMessage(msg) {
                     text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,42,41,12,4,point), count))+"\n";
                     text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,41,42,11,5,point), count))+"\n";
                     text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,44,43,12,4,point), count))+"\n";
-                    text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,4,point), count))+"\n";
+                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,4,point), count))+"\n";
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,45,46,12,4,point-1), count))+"\n";
@@ -232,7 +246,7 @@ function onMessage(msg) {
                     text += "적주피%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,42,10,point), count))+"\n";
                     text += "추가피해%: " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,41,9,point), count))+"\n";
                     text += "낙인력%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,44,10,point), count))+"\n";
-                    text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,10,point), count))+"\n";
+                    // text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,10,point), count))+"\n";
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력%  : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions(7,45,10,point-1), count))+"\n";
@@ -260,7 +274,7 @@ function onMessage(msg) {
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,45,46,10,10,point-1), count))+"\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,46,54,10,10,point-1), count))+"\n";
+                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,46,54,10,11,point-1), count))+"\n";
 
                     text += "\n※ 반지\n";
                     text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv,200030,getEtcOptions2(7,50,49,10,10,point-1), count))+"\n";
@@ -276,7 +290,7 @@ function onMessage(msg) {
                     text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,42,41,10,4,point), count))+"\n";
                     text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,41,42,9,5,point), count))+"\n";
                     text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,44,43,10,4,point), count))+"\n";
-                    text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,10,4,point), count))+"\n";
+                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,10,4,point), count))+"\n";
 
                     text += "\n※ 귀걸이\n";
                     text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv,200020,getEtcOptions2(7,45,46,10,4,point-1), count))+"\n";
@@ -293,41 +307,51 @@ function onMessage(msg) {
                 }
             } else if(cmdArr[1] == '유각'){
                 let page = cmdArr[2]||1;
-                text += "📢 유물각인서 최저가 "+page+"페이지\n\n";
-                var data = getBookPrice(Data.CategoryCode.각인서, "유물", page);
-
-                if(data.Items.length > 0){
-                    data.Items.forEach(item => {
-                        text += item.Name.replace("각인서","").replace(" ","") +" "+set_comma(item.CurrentMinPrice)+"\n";
-                    });
-                    if(data.Items.length == 10){
-                        text += "\n다음페이지 검색( .시세 유각 "+ (Number(page)+1)+") ";
-                    }
-                    else{
-                        text += "\n마지막페이지";
-                    }
+                if (!/^\d+$/.test(page)) {
+                    text = "조회 페이지는 숫자만 입력해주세요.";
                 }
                 else{
-                    text += "검색 결과가 없습니다.";
+                    text += "📢 유물각인서 최저가 "+page+"페이지\n\n";
+                    var data = getBookPrice(Data.CategoryCode.각인서, "유물", page);
+    
+                    if(data.Items.length > 0){
+                        data.Items.forEach(item => {
+                            text += item.Name.replace("각인서","").replace(" ","") +" "+set_comma(item.CurrentMinPrice)+"\n";
+                        });
+                        if(data.Items.length == 10){
+                            text += "\n다음페이지 검색( .시세 유각 "+ (Number(page)+1)+") ";
+                        }
+                        else{
+                            text += "\n마지막페이지";
+                        }
+                    }
+                    else{
+                        text += "검색 결과가 없습니다.";
+                    }
                 }
             } else if(cmdArr[1] == '전각'){
                 let page = cmdArr[2]||1;
-                text += "📢 전설각인서 최저가 "+page+"페이지\n\n";
-                var data = getBookPrice(Data.CategoryCode.각인서, "전설", page);
-
-                if(data.Items.length > 0){
-                    data.Items.forEach(item => {
-                        text += item.Name.replace("각인서","").replace(" ","") +" "+set_comma(item.CurrentMinPrice)+"\n";
-                    });
-                    if(data.Items.length == 10){
-                        text += "\n다음페이지 검색( .시세 전각 "+ (Number(page)+1)+") ";
-                    }
-                    else{
-                        text += "\n마지막페이지";
-                    }
+                if (!/^\d+$/.test(page)) {
+                    text = "조회 페이지는 숫자만 입력해주세요.";
                 }
                 else{
-                    text += "검색 결과가 없습니다.";
+                    text += "📢 전설각인서 최저가 "+page+"페이지\n\n";
+                    var data = getBookPrice(Data.CategoryCode.각인서, "전설", page);
+    
+                    if(data.Items.length > 0){
+                        data.Items.forEach(item => {
+                            text += item.Name.replace("각인서","").replace(" ","") +" "+set_comma(item.CurrentMinPrice)+"\n";
+                        });
+                        if(data.Items.length == 10){
+                            text += "\n다음페이지 검색( .시세 전각 "+ (Number(page)+1)+") ";
+                        }
+                        else{
+                            text += "\n마지막페이지";
+                        }
+                    }
+                    else{
+                        text += "검색 결과가 없습니다.";
+                    }
                 }
             } else if(cmdArr[1] == '재료'){
                 text += "📢 강화재료 최저가\n\n";
