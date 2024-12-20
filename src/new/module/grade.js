@@ -14,21 +14,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.40%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "0.95%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "1.55%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 유물 3T
+            {
+                "DisplayValue": "0.24%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.54%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.89%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+             // 고대 3T
+            {
+                "DisplayValue": "0.29%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.66%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.09%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.40%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.95%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.55%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -38,21 +71,54 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "80",
-                  "Value": 1,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "195",
-                  "Value": 2,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "390",
-                  "Value": 3,
-                  "IsPercentage": false
-              }
+            //3T 유물
+            {
+                "DisplayValue": "14",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "33",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "68",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            //3T 고대
+            {
+                "DisplayValue": "24",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "61",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "118",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            //4T
+            {
+                "DisplayValue": "80",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "195",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "390",
+                "Value": 3,
+                "IsPercentage": false
+            }
           ]
       },
       {
@@ -64,21 +130,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "2.15%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "4.80%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "8.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            //3T 유물
+            {
+                "DisplayValue": "1.20%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.76%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.60%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //3T 고대
+            {
+                "DisplayValue": "1.48%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.36%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "5.60%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //4T
+            {
+                "DisplayValue": "2.15%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.80%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "8.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -90,6 +189,39 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
+            //3T 유물
+            {
+                "DisplayValue": "0.46%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.04%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.72%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //3T 고대
+            {
+                "DisplayValue": "0.56%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.26%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.10%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //4T
               {
                   "DisplayValue": "0.80%",
                   "Value": 1,
@@ -114,21 +246,54 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "195",
-                  "Value": 1,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "480",
-                  "Value": 2,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "960",
-                  "Value": 3,
-                  "IsPercentage": false
-              }
+            //3T 유물
+            {
+                "DisplayValue": "32",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "75",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "155",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            //3T 고대
+            {
+                "DisplayValue": "57",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "147",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "285",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            //4T
+            {
+                "DisplayValue": "195",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "480",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "960",
+                "Value": 3,
+                "IsPercentage": false
+            }
           ]
       },
       {
@@ -138,21 +303,54 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.20%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "0.50%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "1.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T유물
+            {
+                "DisplayValue": "0.15%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.35%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.58%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T고물
+            {
+                "DisplayValue": "0.19%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.42%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.70%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.20%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.50%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -164,21 +362,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "1.60%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "3.60%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "6.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.90%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.07%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.45%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "1.11%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.52%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.20%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "1.60%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.60%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "6.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -190,21 +421,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "1.35%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "3.00%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "5.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            //3T 유물
+            {
+                "DisplayValue": "0.76%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.72%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.88%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //3T 고대
+            {
+                "DisplayValue": "0.92%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.12%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.52%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            //4T
+            {
+                "DisplayValue": "1.35%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.00%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "5.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -216,21 +480,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "2.00%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "4.50%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "7.50%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "1.14%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.58%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.32%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "1.38%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.18%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "5.28%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "2.00%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.50%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "7.50%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -242,21 +539,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.55%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "1.20%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "2.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.30%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.69%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.15%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.37%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.84%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.40%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T 
+            {
+                "DisplayValue": "0.55%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.20%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -266,21 +596,54 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "10",
-                  "Value": 1,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "25",
-                  "Value": 2,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "50",
-                  "Value": 3,
-                  "IsPercentage": false
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "5",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "13",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "21",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "8",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "17",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "28",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 4T
+            {
+                "DisplayValue": "10",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "25",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "50",
+                "Value": 3,
+                "IsPercentage": false
+            }
           ]
       },
       {
@@ -290,21 +653,49 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "6",
-                  "Value": 1,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "15",
-                  "Value": 2,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "30",
-                  "Value": 3,
-                  "IsPercentage": false
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "5",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "10",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "17",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "13",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "21",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 4T
+            {
+                "DisplayValue": "6",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "15",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "30",
+                "Value": 3,
+                "IsPercentage": false
+            }
           ]
       },
       {
@@ -314,21 +705,54 @@ const data = {
           "Categorys": null,
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "1300",
-                  "Value": 1,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "3250",
-                  "Value": 2,
-                  "IsPercentage": false
-              },
-              {
-                  "DisplayValue": "6500",
-                  "Value": 3,
-                  "IsPercentage": false
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "719",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "1654",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "2756",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "992",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "2253",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "3755",
+                "Value": 3,
+                "IsPercentage": false
+            },
+            // 4T
+            {
+                "DisplayValue": "1300",
+                "Value": 1,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "3250",
+                "Value": 2,
+                "IsPercentage": false
+            },
+            {
+                "DisplayValue": "6500",
+                "Value": 3,
+                "IsPercentage": false
+            }
           ]
       },
       {
@@ -340,21 +764,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.70%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "1.60%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "2.60%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.39%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.90%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.50%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.48%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.09%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.82%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.70%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.60%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.60%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -366,21 +823,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.40%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "0.95%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "1.55%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.24%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.54%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.89%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.29%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.66%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.09%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.40%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "0.95%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.55%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -392,21 +882,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "1.10%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "2.40%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "4.00%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.61%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.38%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.30%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.74%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.70%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.82%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "1.10%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.40%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "4.00%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -418,21 +941,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.95%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "2.10%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "3.50%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.54%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.21%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.01%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.65%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.47%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.45%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.95%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.10%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.50%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       },
       {
@@ -444,21 +1000,54 @@ const data = {
           ],
           "Tiers": null,
           "EtcValues": [
-              {
-                  "DisplayValue": "0.95%",
-                  "Value": 1,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "2.10%",
-                  "Value": 2,
-                  "IsPercentage": true
-              },
-              {
-                  "DisplayValue": "3.50%",
-                  "Value": 3,
-                  "IsPercentage": true
-              }
+            // 3T 유물
+            {
+                "DisplayValue": "0.54%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.21%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.01%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 3T 고대
+            {
+                "DisplayValue": "0.65%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "1.47%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.45%",
+                "Value": 3,
+                "IsPercentage": true
+            },
+            // 4T
+            {
+                "DisplayValue": "0.95%",
+                "Value": 1,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "2.10%",
+                "Value": 2,
+                "IsPercentage": true
+            },
+            {
+                "DisplayValue": "3.50%",
+                "Value": 3,
+                "IsPercentage": true
+            }
           ]
       }
   ]

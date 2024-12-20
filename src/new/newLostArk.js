@@ -65,7 +65,7 @@ function onMessage(msg) {
 
       lostArkFunc.selectCharacterEquip1(client, characterInfo,msg.room);
     }
-    else if(param == '장신구'){
+    else if(param == '장신구' || param == '악세'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){

@@ -153,7 +153,8 @@ module.exports.getTranscendence = (item) => {
 // 장신구 정보
 module.exports.getAccessories = (item) => {
     // 악세
-    var retTxt = '\n'+ item.quality +" "+ module.exports.getGradeName(item.grade) + ' '+ item.name + '\n';
+    var name = item.name.split(" ");
+    var retTxt = '\n'+item.quality +" "+item.tier+"T"+ module.exports.getGradeName(item.grade) + ' '+ name[name.length-1] + '\n';
         
     var engrave_effects = Object.keys(item.engraveEffects);
     var enforce_effects = Object.keys(item.enforceEffects);
