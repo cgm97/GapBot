@@ -643,7 +643,7 @@ module.exports.getUserGem = (nickName,infoJson) => {
         headText += '장착된 보석이 없습니다.';
     }
     else{
-        headText += '멸화 ['+powerGemCnt+'개] 홍염 ['+coolGemCnt+'개]\n';
+        headText += '겁/멸 ['+powerGemCnt+'개] 작/홍 ['+coolGemCnt+'개]\n';
     }
 
     jewel_arr.sort((a,b) => b.level - a.level); // 내림차순
@@ -654,6 +654,36 @@ module.exports.getUserGem = (nickName,infoJson) => {
 
     return headText + bodyText;
 }
+
+module.exports.selectSkills = (nickName,infoJson) => {  
+    var headText = '';
+    var bodyText = '';
+    headText += '📢 '+nickName+ ' 님의 스킬 현황\n';
+
+    var skill = infoJson.skills
+    var point = infoJson.skillPoint
+
+    bodyText += "\n스킬포인트 "+ point.value + "/" + point.maxValue + "\n";
+    skill.forEach(skill => {
+        bodyText += "\n" + 
+        (skill.rune 
+            ? Data.getGradeName(skill.rune.grade || '')+" "+ (skill.rune.name || '')
+            : "장착　없음") + 
+        " | " + 
+        "Lv." + skill.level + " " + skill.name;
+    })
+
+    bodyText += '\n\n트라이포드 ▼'+'\u200b'.repeat(501)+"\n";
+    skill.forEach(skill => {
+        bodyText += "----------------------";
+        bodyText += "\nLv."+skill.level+" "+skill.name + "\n";
+        skill.tripods.forEach(tripod => {
+            bodyText += "Lv." +tripod.level+" "+tripod.name + "\n";
+        })
+    })
+    return headText + bodyText;
+}
+
 
 // 이모티콘
 module.exports.exportImg = (client,url,text,room) => {

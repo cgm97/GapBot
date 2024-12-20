@@ -301,6 +301,16 @@ function onMessage(msg) {
       });
       msg.reply(txt);
     }
+    else if(param == '스킬' || param == 'ㅅㅋ'){
+      try{
+        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+        } catch(e){
+          msg.reply("존재하지 않는 캐릭터입니다.");
+        }
+        var characterInfo = JSON.parse(croll);
+  
+        msg.reply(lostArkFunc.selectSkills(str,characterInfo));
+    }
   }
 }
 bot.addListener(Event.MESSAGE, onMessage);

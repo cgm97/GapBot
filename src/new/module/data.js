@@ -115,7 +115,11 @@ module.exports.ENHANCEMENTDATA = [
 module.exports.getGradeName = (grade) => { 
     return grade == 7 ? "[에스더]" : 
            grade == 6 ? "[고대]" : 
-           "[유물]";
+           grade == 5 ? "[유물]" : 
+           grade == 4 ? "[전설]" : 
+           grade == 3 ? "[영웅]" : 
+           grade == 2 ? "[희귀]" : 
+           "";
 }
 
 // 장비 아이템 이름
