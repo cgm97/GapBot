@@ -521,18 +521,18 @@ module.exports.selectCharacterArkPassive = (arkPassive, str) => {
     }
 
     var retText = "";
-    retText += '📢 '+str+ ' 님의 아크패시브\n\n';
-    retText += "진화 \n"
+    retText += '📢 '+str+ ' 님의 아크패시브';
+    retText += "\n\n진화 "+arkPassive.evolution
     evolution.forEach(effect => {
-        retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+        retText += "\n"+effect.tier+"티어 "+effect.name+"Lv"+effect.level
     })
-    retText += "깨달음 \n"
+    retText += "\n\n깨달음 "+arkPassive.realization
     realization.forEach(effect => {
-        retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+        retText += "\n"+effect.tier+"티어 "+effect.name+"Lv"+effect.level
     })
-    retText += "도약 \n"
+    retText += "\n\n도약 "+arkPassive.leap
     leap.forEach(effect => {
-        retText += effect.tier+"티어 "+effect.name+"Lv"+effect.level+"\n"
+        retText += "\n"+effect.tier+"티어 "+effect.name+"Lv"+effect.level
     })
     return retText;
 }

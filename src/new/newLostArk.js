@@ -45,7 +45,7 @@ function onMessage(msg) {
     let param = cmdArr[0];
     let str = msg.content.substr(cmdArr[0].length + 1).trim();
 
-    if(param == '정보'){
+    if(param == '정보'|| param =='ㅈㅂ'){
       try{
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -65,7 +65,7 @@ function onMessage(msg) {
 
       lostArkFunc.selectCharacterEquip1(client, characterInfo,msg.room);
     }
-    else if(param == '장신구' || param == '악세'){
+    else if(param == '장신구' || param == '악세' || param =='ㅇㅅ' || param =='ㅈㅅㄱ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -75,7 +75,7 @@ function onMessage(msg) {
 
       msg.reply(lostArkFunc.selectCharacterAccessories(characterInfo,str));
     }
-    else if(param == '팔찌'){
+    else if(param == '팔찌' || param =='ㅍㅉ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -99,7 +99,7 @@ function onMessage(msg) {
       }
       msg.reply(retTxt);
     }
-    else if(param == '내실'){
+    else if(param == '내실' || param =='ㄴㅅ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/"+str+"/collectibles").ignoreContentType(true).get().text();
       } catch(e){
@@ -110,7 +110,7 @@ function onMessage(msg) {
 
       msg.reply(lostArkFunc.selectCharacterCollection(characterInfo,str));
     }
-    else if(param == '모험섬'){
+    else if(param == '모험섬' || param =='ㅁㅎㅅ'){
       var date = new Date();
       var year = date.getFullYear();
       var month = ("0" + (1 + date.getMonth())).slice(-2);
@@ -121,7 +121,7 @@ function onMessage(msg) {
 
       lostArkFunc.selectAdventureIsland(client,islandJson,today,msg.room);
     }
-    else if(param == '부캐'){
+    else if(param == '부캐' || param =='ㅂㅋ'){
       try{
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -131,7 +131,7 @@ function onMessage(msg) {
 
       lostArkFunc.selectMembers(client,characterInfo,str,msg.room);
     }
-    else if(param == '원정대'){
+    else if(param == '원정대' || param =='ㅇㅈㄷ'){
       var data;
       var url = "https://developer-lostark.game.onstove.com/characters/"+str+"/siblings";
       data = org.jsoup.Jsoup.connect(url)
@@ -179,7 +179,7 @@ function onMessage(msg) {
       msg.reply(retTxt);
 
     }
-    else if(param == '주급'){
+    else if(param == '주급' || param =='ㅈㄱ'){
       try{
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -189,7 +189,7 @@ function onMessage(msg) {
 
       lostArkFunc.selectCharactersGold(client,characterInfo,msg.room);
     }
-    else if(param == '앜패'){
+    else if(param == '앜패' || param =='ㅇㅍ'){
       try{
       var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -214,7 +214,7 @@ function onMessage(msg) {
         msg.reply('잘못된 명령어 입니다.');
       }
     }
-    else if(param == '떠상'){
+    else if(param == '떠상' || param =='ㄸㅅ'){
       if(isNaN(str)){
         if(Data.SERVER_CODE[str] == undefined){
           msg.reply('잘못된 서버명입니다.');
@@ -228,12 +228,12 @@ function onMessage(msg) {
         msg.reply('잘못된 명령어 입니다.');
       }        
     }
-    else if(param == '크리스탈'){
+    else if(param == '크리스탈' || param == 'ㅋㄹㅅㅌ'){
       var min = JSON.parse(org.jsoup.Jsoup.connect("https://loatool.taeu.kr/api/crystal-history/ohlc/1mon").ignoreContentType(true).get().text());
       var hour = JSON.parse(org.jsoup.Jsoup.connect("https://loatool.taeu.kr/api/crystal-history/ohlc/1h").ignoreContentType(true).get().text());
       msg.reply(lostArkFunc.getCrystal(min,hour));     
     }
-    else if(param == '보석'){
+    else if(param == '보석' || param =='ㅄ' || param =='ㅂㅅ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
@@ -247,7 +247,7 @@ function onMessage(msg) {
         msg.reply('잘못된 명령어 입니다.');
       }              
     }
-    else if(param == '사사게'){
+    else if(param == '사사게' || param =='ㅅㅅㄱ'){
       if(str == ""){
         txt = "검색 키워드를 입력하세요.";
         msg.reply(txt);
@@ -289,7 +289,7 @@ function onMessage(msg) {
       }
       msg.reply(txt);
     }
-    else if(param == '클골'){
+    else if(param == '클골' || param == 'ㅋㄱ'){
       var clearGold = Data.RAID;
 
       var txt = "📢 레이드 클리어 골드"+'\u200b'.repeat(501)+"\n";
