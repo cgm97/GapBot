@@ -311,6 +311,7 @@ function onMessage(msg) {
   
         msg.reply(lostArkFunc.selectSkills(str,characterInfo));
     }
+
   }
 }
 bot.addListener(Event.MESSAGE, onMessage);

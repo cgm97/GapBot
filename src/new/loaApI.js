@@ -33,6 +33,24 @@ const Data = require('data');
  */
 function onMessage(msg) {
 
+    if (msg.content.includes('vs')) {
+        // msg.content: 사용자 입력 메시지
+        var cmdArr = msg.content.split('vs');
+    
+        // 입력 배열의 길이를 확인하여 처리
+        if (cmdArr.length >= 2) {
+            // 양쪽 공백 제거
+            cmdArr = cmdArr.map(item => item.trim());
+    
+            // 랜덤으로 선택
+            var randomIndex = Math.floor(Math.random() * cmdArr.length);
+    
+            // 선택된 항목 반환
+            msg.reply(cmdArr[randomIndex]);
+        }
+        return;
+    }
+
     if(msg.content.startsWith(".")){
         let cmd = msg.content.slice(1);
         var cmdArr = cmd.split(' ');
@@ -691,7 +709,7 @@ bot.addListener(Event.MESSAGE, onMessage);
  * (Array) msg.args: 명령어 인자 배열
  */
 function onCommand(msg) {
-    if(msg.args[1] != "2"){
+    if(msg.args[1] != "3"){
         return;
     }
     if(msg.command == "컴파일"){
