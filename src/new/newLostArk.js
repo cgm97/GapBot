@@ -311,7 +311,12 @@ function onMessage(msg) {
   
         msg.reply(lostArkFunc.selectSkills(str,characterInfo));
     }
-
+    else if(param == '큐브목록' || param == 'ㅋㅂㅁㄹ'){
+      var userCode = msg.author.hash ? msg.author.hash : msg.author.name;
+      var roomCode = msg.channelId;
+      var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/cube?roomCode="+roomCode+"&userCode="+userCode).ignoreContentType(true).get().text();
+      msg.reply(lostArkFunc.getUserCharCubeInfo(msg.author.name, croll));
+    } 
   }
 }
 bot.addListener(Event.MESSAGE, onMessage);

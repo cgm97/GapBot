@@ -33,9 +33,16 @@ function onMessage(msg) {
   
   var param = msg.content;
 
-  if(param == '#A'){
-    msg.reply(msg.author.hash);
-    msg.reply(msg.channelId);
+  if(param == '빈틈봇연동'){
+
+    // 유저 ID 생성 (hash 값이 있으면 사용, 없으면 이름 사용)
+    var userId = msg.author.hash ? msg.author.hash : msg.author.name;
+
+    var retStr = '📢 '+ msg.author.name+ '님의 연동코드\n\n';;
+    retStr += "채팅방 CODE : "+ msg.channelId +"\n";
+    retStr += "유저 CODE : "+ userId +"\n\n";
+    retStr += "빈틈봇연동은 https://www.loagap.com 내정보 페이지에서 등록하세요.";
+    msg.reply(retStr);
   }
   
   if(param == '씨익콩'){
