@@ -42,7 +42,10 @@ function onMessage(msg) {
     retStr += "채팅방 CODE : "+ msg.channelId +"\n";
     retStr += "유저 CODE : "+ userId +"\n\n";
     retStr += "빈틈봇연동은 https://www.loagap.com 내정보 페이지에서 등록하세요.";
+    var retStr1 = '▼ 메뉴얼 ▼'+'\u200b'.repeat(501)+"\n\n";
+    retStr1 += "https://superb-antler-e73.notion.site/17ac5e5dcbb1805b9ccefb207463361a?pvs=74"
     msg.reply(retStr);
+    msg.reply(retStr1);
   }
   
   if(param == '씨익콩'){
@@ -130,7 +133,7 @@ function onCommand(msg) {
     } catch(e){
       msg.reply('양식에 맞지 않아 신청이 실패되었습니다.');
     }
-  } 
+  }
 }
 bot.setCommandPrefix("@"); //@로 시작하는 메시지를 command로 판단
 bot.addListener(Event.COMMAND, onCommand);

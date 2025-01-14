@@ -695,53 +695,58 @@ module.exports.getUserCharCubeInfo = (userName, croll) => {
     var cubes = cubeInfo.cubes;
     var totalRewards = cubeInfo.totalRewards;
 
-    headText += '📢 '+userName+ ' 님의 큐브 목록\n\n';
-    headText += '❙ 총 큐브 보상\n';
-    headText += '골드 : '+module.exports.set_comma(totalRewards.gold)+'\n';
-    headText += '실링 : '+module.exports.set_comma(totalRewards.siling)+'\n';
-    headText += '카경 : '+module.exports.set_comma(totalRewards.cardExp);
-    if(totalRewards.total3jews > 0){
-        headText += '\n❙ 3T 보석\n';
-        totalRewards.total3jewsGrade.forEach(jew => {
-            headText += jew.level+"레벨("+jew.count+") ";
+    if(cubeInfo && Object.keys(cubeInfo).length !== 0){
+        headText += '📢 '+userName+ ' 님의 큐브 목록\n\n';
+        headText += '❙ 총 큐브 보상\n';
+        headText += '골드 : '+module.exports.set_comma(totalRewards.gold)+'\n';
+        headText += '실링 : '+module.exports.set_comma(totalRewards.siling)+'\n';
+        headText += '카경 : '+module.exports.set_comma(totalRewards.cardExp);
+        if(totalRewards.total3jews > 0){
+            headText += '\n❙ 3T 보석\n';
+            totalRewards.total3jewsGrade.forEach(jew => {
+                headText += jew.level+"레벨("+jew.count+") ";
+            });
+        }
+        if(totalRewards.total4jews > 0){
+            headText += '\n❙ 4T 보석\n';
+            totalRewards.total4jewsGrade.forEach(jew => {
+                headText += jew.level+"레벨("+jew.count+") ";
+            });
+        }
+        bodyText += '\n\n▼ 캐릭터 별 예상 보상 ▼'+'\u200b'.repeat(501)+"\n\n";
+    
+        cubes.forEach(character => {
+            // 캐릭터의 모든 큐브에 대해 reward.count를 검사
+            const hasReward = character.cubes.some(cube => cube.reward.count > 0);
+        
+            // 만약 보상이 있는 큐브가 하나도 없다면 이 캐릭터는 출력하지 않음
+            if (!hasReward) return;
+        
+            // 보상이 있는 경우에만 캐릭터 정보를 추가
+            bodyText += "[" + character.job + "] " + character.nickName + " " + character.itemLevel + "\n";
+        
+            character.cubes.forEach(cube => {
+                if (cube.reward.count > 0) {
+                    bodyText += "❙ " + cube.name + "(" + cube.reward.count + "장)" + "\n";
+                    bodyText += '골드 : ' + module.exports.set_comma(cube.reward.jewelryPrice) + '\n';
+                    bodyText += '실링 : ' + module.exports.set_comma(cube.reward.selling) + '\n';
+                    bodyText += '카경 : ' + module.exports.set_comma(cube.reward.cardExp) + '\n';
+                    bodyText += '돌파석 : ' + module.exports.set_comma(cube.reward.stones) + '\n';
+                    bodyText += '보석 : ';
+                    cube.reward.jewelryGrade.forEach(jew => {
+                        bodyText += jew.level + "레벨(" + jew.count + ") ";
+                    });
+                    bodyText += "\n";
+                }
+            });
+            bodyText += "\n";
         });
+        
+        bodyText+= "자세한 정보는 https://www.loagap.com 에서 확인하세요."
+    } else {
+        headText += '📢 '+userName+ ' 님의 큐브 목록\n\n';
+        bodyText += "빈틈봇과 연동이 되어있지않습니다.\n('빈틈봇연동'을 입력하여 연동 해주세요.)";
     }
-    if(totalRewards.total4jews > 0){
-        headText += '\n❙ 4T 보석\n';
-        totalRewards.total4jewsGrade.forEach(jew => {
-            headText += jew.level+"레벨("+jew.count+") ";
-        });
-    }
-    bodyText += '\n\n▼ 캐릭터 별 예상 보상 ▼'+'\u200b'.repeat(501)+"\n\n";
-
-    cubes.forEach(character => {
-        // 캐릭터의 모든 큐브에 대해 reward.count를 검사
-        const hasReward = character.cubes.some(cube => cube.reward.count > 0);
-    
-        // 만약 보상이 있는 큐브가 하나도 없다면 이 캐릭터는 출력하지 않음
-        if (!hasReward) return;
-    
-        // 보상이 있는 경우에만 캐릭터 정보를 추가
-        bodyText += "[" + character.job + "] " + character.nickName + " " + character.itemLevel + "\n";
-    
-        character.cubes.forEach(cube => {
-            if (cube.reward.count > 0) {
-                bodyText += "❙ " + cube.name + "(" + cube.reward.count + "장)" + "\n";
-                bodyText += '골드 : ' + module.exports.set_comma(cube.reward.jewelryPrice) + '\n';
-                bodyText += '실링 : ' + module.exports.set_comma(cube.reward.selling) + '\n';
-                bodyText += '카경 : ' + module.exports.set_comma(cube.reward.cardExp) + '\n';
-                bodyText += '돌파석 : ' + module.exports.set_comma(cube.reward.stones) + '\n';
-                bodyText += '보석 : ';
-                cube.reward.jewelryGrade.forEach(jew => {
-                    bodyText += jew.level + "레벨(" + jew.count + ") ";
-                });
-                bodyText += "\n";
-            }
-        });
-        bodyText += "\n";
-    });
-    
-    bodyText+= "자세한 정보는 https://www.loagap.com 에서 확인하세요."
     return headText+bodyText;
 }
 
