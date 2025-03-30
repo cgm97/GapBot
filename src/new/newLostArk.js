@@ -16,6 +16,8 @@ const cookies = service.login({
 client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
 
 const dataFile = "refiningDB"; // 재련DB
+const roomListFile = "roomListDB"; // 방목록
+
 /**
  * (string) msg.content: 메시지의 내용
  * (string) msg.room: 메시지를 받은 방 이름
@@ -34,6 +36,28 @@ const dataFile = "refiningDB"; // 재련DB
  */
 function onMessage(msg) {
 
+  // 채팅방 저장 - 공지용
+  if (!Database.exists(roomListFile)) {
+    Database.writeObject(roomListFile, []);
+  }
+  
+  let roomList = Database.readObject(roomListFile); // 전체 데이터 로드
+
+  if (!Array.isArray(roomList)) {
+    // roomList가 배열이 아닌 경우 초기화
+    roomList = [];
+  }
+  
+  if (msg.isGroupChat) {
+    const roomName = msg.room; // 현재 메시지의 방 이름
+  
+    // roomList에 방 이름이 없으면 추가
+    if (!roomList.includes(roomName)) {
+      roomList.push(roomName); // 새로운 방 이름 추가
+      Database.writeObject(roomListFile, roomList); // 변경된 데이터 저장
+    }
+  }
+
   if(msg.content.startsWith(".")){
     if(!msg.isGroupChat){
       msg.reply("해당 명령어를 실행 할 권한이 없습니다.\n관리자에게 문의주세요.");
@@ -46,25 +70,26 @@ function onMessage(msg) {
     let str = msg.content.substr(cmdArr[0].length + 1).trim();
 
     if(param == '정보'|| param =='ㅈㅂ'){
-      try{
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
-      } catch(e){
-        msg.reply("존재하지 않는 캐릭터입니다.");
-      }
-      var characterInfo = JSON.parse(croll);
+      // try{
+      // var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      // } catch(e){
+      //   msg.reply("존재하지 않는 캐릭터입니다.");
+      // }
+      // var characterInfo = JSON.parse(croll);
 
-      lostArkFunc.selectCharacterInfo(client, characterInfo,msg.room);
+      // lostArkFunc.selectCharacterInfo(client, characterInfo,msg.room);
+      // msg.reply("현재 정보(25/02/01 22시42분 ~ ) 점검중입니다.");
     }
-    else if(param == '장비'){
-      try{
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
-      } catch(e){
-        msg.reply("존재하지 않는 캐릭터입니다.");
-      }
-      var characterInfo = JSON.parse(croll);
+    // else if(param == '장비'){
+      // try{
+      // var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      // } catch(e){
+      //   msg.reply("존재하지 않는 캐릭터입니다.");
+      // }
+      // var characterInfo = JSON.parse(croll);
 
-      lostArkFunc.selectCharacterEquip1(client, characterInfo,msg.room);
-    }
+      // lostArkFunc.selectCharacterEquip1(client, characterInfo,msg.room);
+    // }
     else if(param == '장신구' || param == '악세' || param =='ㅇㅅ' || param =='ㅈㅅㄱ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
@@ -75,30 +100,22 @@ function onMessage(msg) {
 
       msg.reply(lostArkFunc.selectCharacterAccessories(characterInfo,str));
     }
-    else if(param == '팔찌' || param =='ㅍㅉ'){
-      try{
-        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
-      } catch(e){
-        msg.reply("존재하지 않는 캐릭터입니다.");
-      }
-      var characterInfo = JSON.parse(croll);
-      var bracelet = characterInfo.accessories.bracelet; // 팔찌
+    // else if(param == '팔찌' || param =='ㅍㅉ'){
+    //   try{
+    //     var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/bangleOption?nickName=" + str).ignoreContentType(true).get().text();
+    //   } catch(e){
+    //     msg.reply("존재하지 않는 캐릭터입니다.");
+    //   }
+    //   var characterInfo = JSON.parse(croll);
+    //   var bracelet = characterInfo.bangleOption; // 팔찌
 
-      var retTxt = "📢 "+ str+"님의 팔찌\n";
-      // 팔찌
-      retTxt += '\n'+ Data.getGradeName(bracelet.grade) + ' '+ bracelet.name;
-      for(var i=0; i < bracelet.effects.length; i++){
-        if(bracelet.effects[i].value == -1){
-          retTxt += "\n＊ ";
-          retTxt += bracelet.effects[i].description;
-        }
-        else{
-          retTxt += "\n＊ ";
-          retTxt += bracelet.effects[i].name + bracelet.effects[i].value;
-        }
-      }
-      msg.reply(retTxt);
-    }
+    //   var retTxt = "📢 "+ str+"님의 팔찌\n";
+    //   // 팔찌
+    //   bracelet.forEach(bangleOption => {
+    //     retTxt += "\n["+bangleOption.quality+"] " + bangleOption.option
+    //   })
+    //   msg.reply(retTxt);
+    // }
     else if(param == '내실' || param =='ㄴㅅ'){
       try{
         var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/"+str+"/collectibles").ignoreContentType(true).get().text();
@@ -187,7 +204,12 @@ function onMessage(msg) {
       }
       var characterInfo = JSON.parse(croll);
 
-      lostArkFunc.selectCharactersGold(client,characterInfo,msg.room);
+      
+      var header = "📢 "+str+"님의 주급(격주제외, 6캐릭)\n\n";
+      var body = lostArkFunc.selectCharactersGold(client,characterInfo,msg.room);
+
+      msg.reply(header+body);
+
     }
     else if(param == '앜패' || param =='ㅇㅍ'){
       try{
@@ -233,20 +255,20 @@ function onMessage(msg) {
       var hour = JSON.parse(org.jsoup.Jsoup.connect("https://loatool.taeu.kr/api/crystal-history/ohlc/1h").ignoreContentType(true).get().text());
       msg.reply(lostArkFunc.getCrystal(min,hour));     
     }
-    else if(param == '보석' || param =='ㅄ' || param =='ㅂㅅ'){
-      try{
-        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
-      } catch(e){
-        return msg.reply('존재하지 않는 캐릭터입니다.');
-      }
-      var characterInfo = JSON.parse(croll);
-      if(isNaN(str)){
-        msg.reply(lostArkFunc.getUserGem(str,characterInfo));
-      }
-      else {
-        msg.reply('잘못된 명령어 입니다.');
-      }              
-    }
+    // else if(param == '보석' || param =='ㅄ' || param =='ㅂㅅ'){
+      // try{
+      //   var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      // } catch(e){
+      //   return msg.reply('존재하지 않는 캐릭터입니다.');
+      // }
+      // var characterInfo = JSON.parse(croll);
+      // if(isNaN(str)){
+      //   msg.reply(lostArkFunc.getUserGem(str,characterInfo));
+      // }
+      // else {
+      //   msg.reply('잘못된 명령어 입니다.');
+      // }              
+    // }
     else if(param == '사사게' || param =='ㅅㅅㄱ'){
       if(str == ""){
         txt = "검색 키워드를 입력하세요.";
@@ -311,7 +333,7 @@ function onMessage(msg) {
   
         msg.reply(lostArkFunc.selectSkills(str,characterInfo));
     }
-    else if(param == '큐브목록' || param == 'ㅋㅂㅁㄹ'){
+    else if(param == '큐브' || param == 'ㅋㅂ'){
       var userCode = msg.author.hash ? msg.author.hash : msg.author.name;
       var roomCode = msg.channelId;
       var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/cube?roomCode="+roomCode+"&userCode="+userCode).ignoreContentType(true).get().text();
@@ -486,6 +508,13 @@ function onCommand(msg) {
       }
     }
     msg.reply(_return); 
+  }
+  else if(cmd=='공지보내기'){
+    const roomList = Database.readObject(roomListFile);
+
+    roomList.forEach((room) => {
+      bot.send(room, msg.args.join(" "));
+    });
   }
 
 }

@@ -171,6 +171,29 @@ module.exports.selectCharacterInfo = (client,characterInfo,room) => {
     //     }
     // }
 
+    var effects = characterInfo.arkPassive.effects;
+
+    // 구분된 데이터를 저장할 객체
+    // var evolution = []  // 진화
+    // var realization = [] // 깨달음
+
+    var supportJob = "";
+    for(var i=0; i < effects.length; i++){
+        // if(effects[i].type == 1){
+        //     evolution.push(effects[i]);
+        // }
+        if(effects[i].type == 2){
+            // realization.push(effects[i]);
+            if(effects[i].tier == 1){
+                Data.arkFilter.forEach(f =>{
+                    if(f.name == effects[i].name){
+                        supportJob = f.initial;
+                    }
+                })
+            }
+        }
+    }
+
     // 엘릭스
     // var elixirSetEffects =  Object.keys(characterInfo.elixirSetEffects);
     // var elixirName = "";
@@ -218,6 +241,8 @@ module.exports.selectCharacterInfo = (client,characterInfo,room) => {
 
     var total_point = hat_point + ornaments_point + top_point + pants_point + gloves_point + weapon_point;
 
+    var accValue = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/accValue?nickName=" + characterInfo.name).ignoreContentType(true).get().text();
+    accValue = JSON.parse(accValue);
     var args = {
         img: characterInfo.image || "",
         title: characterInfo.title || "",
@@ -236,7 +261,14 @@ module.exports.selectCharacterInfo = (client,characterInfo,room) => {
         realization: (characterInfo.arkPassive && characterInfo.arkPassive.realization) || "",
         leap: (characterInfo.arkPassive && characterInfo.arkPassive.leap) || "",
         elixirNpointTitle: (elixir && total_point) ? "엘/초" : "",
-        elixirNpointData: (elixir && total_point) ? elixirText + " / " + total_point : ""
+        elixirNpointData: (elixir && total_point) ? elixirText + " / " + total_point : "",
+
+        elixirValue: accValue.elixirValue,
+        hyperValue: accValue.hyperValue,
+        bangleValue: accValue.bangleValue,
+        lopecScore: accValue.lopecScore,
+
+        supportJob: supportJob
     };
     KakaoLinkModule.send(client,114159,args,room);
 }
@@ -496,7 +528,33 @@ module.exports.selectCharactersGold = (client,characterInfo,room) => {
 
         totalGold: module.exports.set_comma((Data.sumGold(retRaid, 0) || 0) + (Data.sumGold(retRaid, 1) || 0) + (Data.sumGold(retRaid, 2) || 0) + (Data.sumGold(retRaid, 3) || 0) + (Data.sumGold(retRaid, 4) || 0) +  (Data.sumGold(retRaid, 5) || 0)) + "G"
     }
-    KakaoLinkModule.send(client,114314,args,room);
+
+    var text = args.totalGold + '\n\n더보기 ▼' + '\u200b'.repeat(501) + "\n";;
+    for (var i = 0; i < 6; i++) {
+        if (!Array.isArray(retRaid[i])) {
+            continue; // 배열이 아닌 경우 다음 반복으로 넘어감
+        }
+    
+        text += "❙ "+Data.getMemberName(myCharacter, i) + "\n";
+    
+        // 각 레이드 데이터가 존재하는지 확인 후 처리
+        for (var j = 0; j < 3; j++) {
+            if (retRaid[i][j] && retRaid[i][j].raidName && retRaid[i][j].reward != null) {
+                text += retRaid[i][j].raidName + "("+retRaid[i][j].difficulty+")" + retRaid[i][j].reward + "G\n";
+            } else {
+                text += "데이터 없음\n"; // 데이터가 없을 경우 기본 메시지
+            }
+        }
+    
+        // 총합 계산 (null 체크 포함)
+        var totalGold = Data.sumGold(retRaid, i);
+        text += "총합 : " + module.exports.set_comma(totalGold || 0) + "G\n\n";
+    }
+    
+    return text;
+
+
+    // KakaoLinkModule.send(client,114314,args,room);
 }
 // 캐릭터 아크패시브
 module.exports.selectCharacterArkPassive = (arkPassive, str) => {

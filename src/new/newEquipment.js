@@ -1,18 +1,18 @@
 const bot = BotManager.getCurrentBot();
 
-const API = require('key');
-const lostArkFunc = require('LostArkFunc');
-var { KakaoApiService, KakaoShareClient } = require('kakaolink');
+// const API = require('key');
+// const lostArkFunc = require('LostArkFunc');
+// var { KakaoApiService, KakaoShareClient } = require('kakaolink');
 
-const service = KakaoApiService.createService();
-const client = KakaoShareClient.createClient();
+// const service = KakaoApiService.createService();
+// const client = KakaoShareClient.createClient();
 
-const cookies = service.login({
-    signInWithKakaoTalk: true,
-    context: App.getContext(), // 레거시: Api.getContext()
-}).awaitResult();
+// const cookies = service.login({
+//     signInWithKakaoTalk: true,
+//     context: App.getContext(), // 레거시: Api.getContext()
+// }).awaitResult();
 
-client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
+// client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
 /**
  * (string) msg.content: 메시지의 내용
  * (string) msg.room: 메시지를 받은 방 이름
@@ -86,22 +86,22 @@ function onMessage(msg) {
     return ;
   }
 
-  if(msg.content.startsWith(".")){
-    if(!msg.isGroupChat){
-      return ;
-    }
-    let cmd = msg.content.slice(1);
-    var cmdArr = cmd.split(' ');
-    let paramA = cmdArr[0];
-    let str = msg.content.substr(cmdArr[0].length + 1).trim();
+  // if(msg.content.startsWith(".")){
+  //   if(!msg.isGroupChat){
+  //     return ;
+  //   }
+  //   let cmd = msg.content.slice(1);
+  //   var cmdArr = cmd.split(' ');
+  //   let paramA = cmdArr[0];
+  //   let str = msg.content.substr(cmdArr[0].length + 1).trim();
 
-    if(paramA == '장비'){
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
-      var characterInfo = JSON.parse(croll);
+  //   if(paramA == '장비'){
+  //     var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+  //     var characterInfo = JSON.parse(croll);
 
-      lostArkFunc.selectCharacterEquip2(client, characterInfo,msg.room);
-    }
-  }
+  //     lostArkFunc.selectCharacterEquip2(client, characterInfo,msg.room);
+  //   }
+  // }
 }
 bot.addListener(Event.MESSAGE, onMessage);
 
