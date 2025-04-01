@@ -65,9 +65,31 @@ function onMessage(msg) {
             try {
                 str = cmdArr.slice(1).join(' '); // 두 번째 요소부터 결합하여 문자열로 만듦
                 var args = getPriceAuctionItem(str);
+                
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = ("0" + (1 + date.getMonth())).slice(-2);
+                var day = ("0" + date.getDate()).slice(-2);
+                var today = year + month + day;
+                var jewels = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date="+today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                var jewelsInfo = JSON.parse(jewels);
+                
+                var keys = Object.keys(jewelsInfo);
 
                 var text = "📢 " + args.itemName + "\n";
-                text += "가격 : " + args.price;
+                text += "가격 : " + set_comma(args.price);
+
+                // forEach를 사용하여 각 키에 대한 처리
+                keys.forEach(key => {
+                    if(key ==  args.itemName){
+                        const jewel = jewelsInfo[key];  // 해당 키에 대한 보석 정보
+                        const yesterdayPrice = jewel.yesterdayPrice; // 어제가격
+                        const priceGap = (args.price - yesterdayPrice);
+                        
+                        text += "\n\n전일대비 : " + set_comma(priceGap) + "("+calculatePercentage(yesterdayPrice,args.price)+")";                       
+                    }
+                });
+
                 msg.reply(text);
                 // kakaoLinkModule.send(client,114257,args,msg.room)
             } catch (e) {
@@ -96,7 +118,7 @@ function onMessage(msg) {
                         if (groupedItems.hasOwnProperty(itemName)) {
                             text += "\n\n❙ " + itemName;
                             groupedItems[itemName].forEach((item) => {
-                                text += '\n' + item.Grade + ' ' + set_comma(item.RecentPrice);
+                                text += '\n' + item.Grade + ' ' + setc_omma(item.RecentPrice);
                             });
                         }
                     }
@@ -336,9 +358,36 @@ function onMessage(msg) {
                     text += "📢 유물각인서 최저가 " + page + "페이지\n\n";
                     var data = getBookPrice(Data.CategoryCode.각인서, "유물", page);
 
+                    // 오늘 날짜 가져오기
+                    var today = new Date();
+                    // 하루 빼기
+                    today.setDate(today.getDate() - 1);
+                    // YYYYMMDD 형식으로 변환
+                    var year = today.getFullYear();
+                    var month = (today.getMonth() + 1).toString().padStart(2, '0');
+                    var day = today.getDate().toString().padStart(2, '0');
+                    var yesterdayDate = year+''+month+''+day;
+
+                    // 전일자 각인서 시세 조회
+                    var books = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/booksLog?date="+yesterdayDate).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                    var booksInfo = JSON.parse(books);
+                    var lastText = "";
+
                     if (data.Items.length > 0) {
                         data.Items.forEach(item => {
                             text += item.Name.replace("각인서", "").replace(" ", "") + " " + set_comma(item.CurrentMinPrice) + "\n";
+
+                             // 전일 각인서 찾기
+                             booksInfo.forEach(book => {
+                                if(item.Name == book.name){
+                                    const name = book.name.replace("각인서", "").replace(" ", "");
+                                    const price = book.price;
+                                    var priceGap = (item.CurrentMinPrice - price);
+                                    
+                                    lastText += name + " " + set_comma(priceGap) + " (" + calculatePercentage(price,item.CurrentMinPrice) + ")"+ "\n";
+                                }
+                            });
+
                         });
                         if (data.Items.length == 10) {
                             text += "\n다음페이지 검색( .시세 유각 " + (Number(page) + 1) + ") ";
@@ -346,6 +395,8 @@ function onMessage(msg) {
                         else {
                             text += "\n마지막페이지";
                         }
+                        text += '\n\n\전일대비 ▼' + '\u200b'.repeat(501) + "\n\n";
+                        text += lastText;
                     }
                     else {
                         text += "검색 결과가 없습니다.";
@@ -406,7 +457,7 @@ function onMessage(msg) {
                         text += "\n" + item.Name + " " + set_comma(item.CurrentMinPrice);
                     });
                 }
-            } else if (cmdArr[1] == '식물') {
+            } else if (cmdArr[1] == '식물' || cmdArr[1] == '채집') {
                 text += "📢 식물채집 최저가\n";
                 var data = getMarketItemPrice(Data.CategoryCode.식물채집, null);
                 if (data.Items.length > 0) {
@@ -455,16 +506,23 @@ function onMessage(msg) {
                     });
                 }
             } else if (cmdArr[1] == '보석') {
-                text += "📢 보석 최저가 (전일대비)\n";
-                var jewels = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog").ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
-                var jewelsInfo = JSON.parse(jewels);
-
+                var date = new Date();
+                var year = date.getFullYear();
+                var month = ("0" + (1 + date.getMonth())).slice(-2);
+                var day = ("0" + date.getDate()).slice(-2);
+                var today = year + month + day;
+                
+                text += "📢 보석시세 "+year +"-"+ month +"-"+ day+"_ 0시기준\n";
+                var jewels1 = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date="+today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                var jewelsInfo = JSON.parse(jewels1);
+                
                 var keys = Object.keys(jewelsInfo);
 
                 // 2. forEach를 사용하여 각 키에 대한 처리
                 keys.forEach(key => {
                     const jewel = jewelsInfo[key];  // 해당 키에 대한 보석 정보
-                    text += "\n" + key + " : " + set_comma(jewel.todayPrice) + " (" + jewel.priceDifference + ")";
+                    const name = extractGemInfo(key);
+                    text += "\n" + name + " : " + set_comma(jewel.todayPrice) + " (" + jewel.priceDifference + ")";
                 });
             }
 
@@ -475,6 +533,23 @@ function onMessage(msg) {
         }
 
     }
+}
+
+// 7레벨 겁화의 보석 -> 7겁 변환
+function extractGemInfo(str) {
+    const parts = str.split(" "); // 공백 기준으로 문자열 나누기
+    const level = parts[0].match(/\d+/)[0]; // 숫자만 추출
+    const gemInitial = parts[1][0]; // 보석의 첫 글자 추출
+    return level+gemInitial;
+}
+
+// 퍼센트게산
+function calculatePercentage(yesterday, today) {
+    if (yesterday === 0) return ""; // 0으로 나누는 오류 방지
+    let percentageChange = ((today - yesterday) / yesterday * 100).toFixed(2); 
+    if (percentageChange > 0) return '▲'+percentageChange+'%';
+    if (percentageChange < 0) return '▼'+Math.abs(percentageChange)+'%';
+    return `0.00%`; // 변화 없을 때
 }
 
 // 경매장
@@ -524,7 +599,7 @@ function getPriceAuctionItem(itemName) {
             args = {
                 itemName: itemName,
                 flag: flag,
-                price: set_comma(price),
+                price: price,
                 img: priceJson.Items[0].Icon
             };
         }
