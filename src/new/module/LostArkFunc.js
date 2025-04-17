@@ -1,6 +1,6 @@
 const KakaoLinkModule = require('KakaoLinkModule');
 const Data = require('data');
-
+const Marchant = require('merchant');
 const imgUrl = "https://pica.korlark.com/";
 
 // 천단위 콤마 함수
@@ -617,41 +617,123 @@ module.exports.calGold= (gold) => {
 }
 
 // 떠상
-module.exports.getMarketInfo= (str,info) => {    
-    var header = '📢 떠돌이상인 - '+str+' ⸜(*◉ ᴗ ◉)⸝\n\n';
+module.exports.getMarketInfo = (str, merchantInfo) => {
+    var header = '📢 떠돌이상인 - ' + str + ' ⸜(*◉ ᴗ ◉)⸝\n\n';
     var result = '';
 
-    for(var i=0; i < info.merchants.length; i++){
+    if (merchantInfo.length < 1) {
+        result += "발견된 떠돌이상인이 없습니다.";
+    } else {
+        var nowUTC = new Date();  // 현재 시간 그대로 (UTC 기준)
+        var currentMerchant = null;
 
-        var created_at = info.merchants[0].created_at.substring(11,13); // 현재 떠상
+        // 현재 시간 기준 떠돌이 상인 중 가장 최근 것 찾기
+        for (var i = 0; i < merchantInfo.length; i++) {
+            var start = new Date(merchantInfo[i].startTime);
+            var end = new Date(merchantInfo[i].endTime);
 
-        if(created_at == info.merchants[i].created_at.substring(11,13)){ // 현재 시간과 동일한 떠상 내역만 출력
-            var continent = info.merchants[i].continent; // 지역
-            result += '➡️ '+continent+"\n";
-
-            for(var j=0; j < info.merchants[i].items.length; j++){
-                var type = info.merchants[i].items[j].type; // 아이템 종류
-                if(type == 0){ // 카드
-                    result += info.merchants[i].items[j].content+" 카드 / ";
-                }
-                else if(type == 1){ // 호감도
-                    var content = info.merchants[i].items[j].content;
-                    if(content == "0"){
-                        result += "영웅호감도 / ";
-                    } else {
-                        result += "전설호감도 / ";
-                    }
-                }
-                else { // 기타(내실)
-                    result += info.merchants[i].items[j].content+" / ";
+            if (start <= nowUTC && end >= nowUTC) {
+                if (
+                    currentMerchant == null ||
+                    start > new Date(currentMerchant.startTime)
+                ) {
+                    currentMerchant = merchantInfo[i];
                 }
             }
-            result += "\n\n";
         }
+        // currentMerchant = merchantInfo[0];
+        if (currentMerchant == null) {
+            result += "현재 등장 중인 떠돌이상인이 없습니다.";
+        } else {
+            var start = new Date(currentMerchant.startTime);
+            var end = new Date(currentMerchant.endTime);
+            var diff = end - nowUTC;
+            if (diff < 0) diff = 0;
+            
+            var h = Math.floor(diff / 1000 / 60 / 60);
+            var m = Math.floor((diff / 1000 / 60) % 60);
+            var s = Math.floor((diff / 1000) % 60);
 
+            var remainTime =
+                (h < 10 ? '0' + h : h) +
+                ':' +
+                (m < 10 ? '0' + m : m) +
+                ':' +
+                (s < 10 ? '0' + s : s);
 
+            var start = toKST(currentMerchant.startTime);
+            var end = toKST(currentMerchant.endTime);
+
+            var message =
+                formatTime(start) +
+                ' ~ ' +
+                formatTime(end) +
+                '\n판매 종료까지 ' +
+                remainTime;
+
+            var allRegionInfo = '';
+            var legendHeart = 0;
+            var legendCard = [];
+            currentMerchant.reports.forEach(function (report) {
+                var regionId = report.regionId;
+                var regionName = '';
+                var itemIds = report.itemIds;
+                var ItemNames = '';
+
+                Marchant.data.forEach(function (marchant) {
+                    if (marchant.id == regionId) {
+                        regionName = marchant.name;
+
+                        itemIds.forEach(function (itemId, index) {
+                            marchant.items.forEach(function (marchantItem) {
+                                if (itemId == marchantItem.id) {
+                                    var ItemName = marchantItem.name;
+                                    // 전호
+                                    if(marchantItem.grade == 4 && marchantItem.type == 2){
+                                        legendHeart++;
+                                    }
+                                    // 전카
+                                    if(marchantItem.grade == 4 && marchantItem.type == 1){
+                                        legendCard.push(ItemName);
+                                    }
+                                    if(marchantItem.grade == 4){
+                                        ItemName = "※"+ItemName;
+                                    }
+                                    // 마지막 항목이 아닐 경우만 ',' 추가
+                                    ItemNames += ItemName + (index < itemIds.length - 1 ? ', ' : '');
+                                }
+                            });
+                        });
+                    }
+                });
+                allRegionInfo += "["+regionName+"]" + '\n' + ItemNames + '\n\n';
+            });
+            result += message+"\n";
+            result += "\n▶ 주요품목";
+            if(legendHeart > 0){
+                result += "\n전설호감도 " + legendHeart +"개";
+            }
+            if (legendCard.length > 0) {
+                result += "\n"+legendCard.join(',');
+            }
+            result += '\n\n ▼ 떠상목록' + '\u200b'.repeat(501) + '\n';
+            result += allRegionInfo;
+        }
     }
+
     return header + result;
+}
+function toKST(utcStr) {
+    var date = typeof utcStr === 'string' ? new Date(utcStr) : utcStr;
+    return new Date(date.getTime() + 9 * 60 * 60 * 1000);
+}
+// 오전/오후 시간 포맷 (UTC 기준)
+function formatTime(date) {
+    var hours = date.getUTCHours();  // UTC 기준 시각
+    var minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    var isPM = hours >= 12;
+    var hour12 = hours % 12 || 12;
+    return (isPM ? '오후 ' : '오전 ') + hour12 + ':' + minutes;
 }
 
 // 크리스탈시세

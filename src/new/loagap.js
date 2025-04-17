@@ -185,7 +185,8 @@ function onCommand(msg) {
         cardName: characterInfo.cardItems.name,
         gemStr: gemStrPower4 + gemStrPower3 + gemStrCool4 + gemStrCool3,
 
-        donate: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donation.png" :"https://www.loagap.com/logo.png"
+        donate: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donation.png" :"https://www.loagap.com/logo.png",
+        donateKing: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donationKing.png" :""
       };
 
       KakaoLinkModule.send(client, 114159, args, msg.room);

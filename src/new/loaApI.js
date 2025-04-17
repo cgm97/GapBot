@@ -118,7 +118,7 @@ function onMessage(msg) {
                         if (groupedItems.hasOwnProperty(itemName)) {
                             text += "\n\n❙ " + itemName;
                             groupedItems[itemName].forEach((item) => {
-                                text += '\n' + item.Grade + ' ' + setc_omma(item.RecentPrice);
+                                text += '\n' + item.Grade + ' ' + set_comma(item.RecentPrice);
                             });
                         }
                     }

@@ -92,7 +92,7 @@ function onMessage(msg) {
     // }
     else if(param == '장신구' || param == '악세' || param =='ㅇㅅ' || param =='ㅈㅅㄱ'){
       try{
-        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
@@ -118,7 +118,7 @@ function onMessage(msg) {
     // }
     else if(param == '내실' || param =='ㄴㅅ'){
       try{
-        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/"+str+"/collectibles").ignoreContentType(true).get().text();
+        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/"+str+"/collectibles").ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
@@ -133,14 +133,14 @@ function onMessage(msg) {
       var month = ("0" + (1 + date.getMonth())).slice(-2);
       var day = ("0" + date.getDate()).slice(-2);
       var today = year + "-" + month + "-" + day;
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/calendar/adventure-islands?date="+today).ignoreContentType(true).get().text();
+      var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/calendar/adventure-islands?date="+today).ignoreContentType(true).get().text();
       var islandJson = JSON.parse(croll);
 
       lostArkFunc.selectAdventureIsland(client,islandJson,today,msg.room);
     }
     else if(param == '부캐' || param =='ㅂㅋ'){
       try{
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
@@ -198,7 +198,7 @@ function onMessage(msg) {
     }
     else if(param == '주급' || param =='ㅈㄱ'){
       try{
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
@@ -213,20 +213,20 @@ function onMessage(msg) {
     }
     else if(param == '앜패' || param =='ㅇㅍ'){
       try{
-      var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+      var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch(e){
         msg.reply("존재하지 않는 캐릭터입니다.");
       }
       var characterInfo = JSON.parse(croll);
 
       var arkPassive = characterInfo.arkPassive;
-      if(!arkPassive.enabled){
-        msg.reply('아크패시브 비활성화 캐릭입니다.');
-        return ;
-      }
-      else{
-        msg.reply(lostArkFunc.selectCharacterArkPassive(arkPassive,str));
-      }
+      msg.reply(lostArkFunc.selectCharacterArkPassive(arkPassive,str));
+      // if(!arkPassive.enabled){
+      //   msg.reply('아크패시브 비활성화 캐릭입니다.');
+      //   return ;
+      // }
+      // else{
+      // }
     }
     else if(param == '분배금' || param == 'ㅂㅂㄱ'){
       if(!isNaN(str)){
@@ -242,9 +242,9 @@ function onMessage(msg) {
           msg.reply('잘못된 서버명입니다.');
           return ;
         }
-        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/merchants?limit=15&server="+Data.SERVER_CODE[str]).ignoreContentType(true).get().text();
-        var characterInfo = JSON.parse(croll);
-        msg.reply(lostArkFunc.getMarketInfo(str,characterInfo));        
+        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/merchant/reports?server="+Data.SERVER_CODE[str]).ignoreContentType(true).get().text();
+        var merchantInfo = JSON.parse(croll);
+        msg.reply(lostArkFunc.getMarketInfo(str,merchantInfo));        
       }
       else{
         msg.reply('잘못된 명령어 입니다.');
@@ -325,7 +325,7 @@ function onMessage(msg) {
     }
     else if(param == '스킬' || param == 'ㅅㅋ'){
       try{
-        var croll = org.jsoup.Jsoup.connect("https://secapi.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
+        var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
         } catch(e){
           msg.reply("존재하지 않는 캐릭터입니다.");
         }
