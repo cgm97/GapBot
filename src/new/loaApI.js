@@ -397,6 +397,7 @@ function onMessage(msg) {
                         }
                         text += '\n\n\전일대비 ▼' + '\u200b'.repeat(501) + "\n\n";
                         text += lastText;
+                        text += "\n\nhttps://www.loagap.com/bookPrice";
                     }
                     else {
                         text += "검색 결과가 없습니다.";

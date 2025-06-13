@@ -5,6 +5,7 @@ var { KakaoApiService, KakaoShareClient } = require('kakaolink');
 const KakaoLinkModule = require('KakaoLinkModule');
 const service = KakaoApiService.createService();
 const client = KakaoShareClient.createClient();
+const lostArkFunc = require('LostArkFunc');
 
 const cookies = service.login({
   signInWithKakaoTalk: true,
@@ -51,21 +52,34 @@ bot.addListener(Event.MESSAGE, onMessage);
  */
 function onCommand(msg) {
 
-  if(!msg.isGroupChat){
-    return ;
+  if (!msg.isGroupChat) {
+    return;
   }
+  const userCode = msg.author.hash ? msg.author.hash : msg.author.name;
+  const roomCode = msg.channelId;
+  var myNickName = "";
+  if (msg.command == "정보" || msg.command == "ㅈㅂ" || msg.command == "내정보" || msg.command == "ㄴㅈㅂ") {
+    var nickName = msg.args[0];
 
-  if (msg.command == "정보" || msg.command == "ㅈㅂ") {
+    if (msg.command == "내정보") {
+      myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+      nickName = myNickName;
+      if (nickName == "") {
+        return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+      }
+    }
 
     try {
-      var characterInfo = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + msg.args[0]).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+      var characterInfo = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + nickName).ignoreContentType(true)
+        .header("referer", "bot.loagap.com")
+        .get().text();
 
       characterInfo = JSON.parse(characterInfo);
 
       // 캐릭터 장비
       var equipItems = characterInfo.equipItems;
 
-      var retTxt = "📢 " + msg.args[0] + "님의 장비\n";
+      var retTxt = "📢 " + nickName + "님의 장비\n";
       var avgProgress = 0;
       const itemNames = ["투구", "견갑", "상의", "하의", "장갑", "무기"];
 
@@ -76,7 +90,7 @@ function onCommand(msg) {
           var prefix = nameParts[0]; // "+16"
           var suffix = nameParts[nameParts.length - 1].startsWith("X") ? nameParts[nameParts.length - 1] : ""; // "X10" 또는 ""
 
-          retTxt += "\n[" + equipItems[i].tier + "T " + equipItems[i].grade + "] " +prefix+" "+ itemNames[i] +" "+suffix+ " : " + equipItems[i].progress;
+          retTxt += "\n[" + equipItems[i].tier + "T " + equipItems[i].grade + "] " + prefix + " " + itemNames[i] + " " + suffix + " : " + equipItems[i].progress;
           avgProgress += parseFloat(equipItems[i].progress);
         }
       }
@@ -84,9 +98,9 @@ function onCommand(msg) {
       retTxt += "\n\n• 평균 품질 : " + (avgProgress / 6).toFixed(1);
       retTxt += '\n\n더보기 ▼' + '\u200b'.repeat(501) + "\n";
       retTxt += '\n❙ 엘릭서 정보\n';
-      for (var i = 0; i < equipItems.length-2; i++) {
+      for (var i = 0; i < equipItems.length - 2; i++) {
         if (equipItems[i].name != "평균") {
-          retTxt += "["+itemNames[i] + "] ";
+          retTxt += "[" + itemNames[i] + "] ";
           for (var j = 0; j < equipItems[i].elixirs.length; j++) {
             retTxt += equipItems[i].elixirs[j] + " ";
           }
@@ -185,8 +199,8 @@ function onCommand(msg) {
         cardName: characterInfo.cardItems.name,
         gemStr: gemStrPower4 + gemStrPower3 + gemStrCool4 + gemStrCool3,
 
-        donate: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donation.png" :"https://www.loagap.com/logo.png",
-        donateKing: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donationKing.png" :""
+        donate: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donation.png" : "https://www.loagap.com/logo.png",
+        donateKing: characterInfo.profile.IS_DONATE == "Y" ? "https://www.loagap.com/donationKing.png" : ""
       };
 
       KakaoLinkModule.send(client, 114159, args, msg.room);
@@ -195,18 +209,25 @@ function onCommand(msg) {
     }
   }
 
-  else if (msg.command == "보석" || msg.command == "ㅂㅅ") {
-
+  else if (msg.command == "보석" || msg.command == "ㅂㅅ" || msg.command == "내보석" || msg.command == "ㄴㅂㅅ") {
+    var nickName = msg.args[0];
+    if (msg.command == "내보석" || msg.command == "ㄴㅂㅅ") {
+      myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+      nickName = myNickName;
+      if (nickName == "") {
+        return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+      }
+    }
     try {
 
-      var characterInfo = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + msg.args[0]).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+      var characterInfo = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + nickName).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
 
       characterInfo = JSON.parse(characterInfo);
 
       var gemItems = characterInfo.gemItems;
 
       var headText = '';
-      headText += '📢 ' + msg.args[0] + ' 님의 보석 현황 (딜 점유율 표시)\n';
+      headText += '📢 ' + nickName + ' 님의 보석 현황 (딜 점유율 표시)\n';
 
       var bodyText = '';
       gemItems.forEach(gem => {
@@ -219,26 +240,39 @@ function onCommand(msg) {
     }
   }
 
-  else if(msg.command == '팔찌' || msg.command =='ㅍㅉ'){
-    try{
-      var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + msg.args[0]).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
-    } catch(e){
+  else if (msg.command == '팔찌' || msg.command == 'ㅍㅉ' || msg.command == '내팔찌' || msg.command == 'ㄴㅍㅉ') {
+    var nickName = msg.args[0];
+
+    if (msg.command == "내팔찌" || msg.command == "ㄴㅍㅉ") {
+      myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+      nickName = myNickName;
+      if (nickName == "") {
+        return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+      }
+    }
+    try {
+      var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/character/search?nickName=" + nickName).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+    } catch (e) {
       msg.reply("존재하지 않는 캐릭터입니다.");
     }
     var characterInfo = JSON.parse(croll);
     var accessoryItems = characterInfo.accessoryItems; // 팔찌
 
-    var retTxt = "📢 "+ msg.args[0]+"님의 팔찌\n";
+    var retTxt = "📢 " + nickName + "님의 팔찌\n";
     // 팔찌
     accessoryItems.forEach(bangleOption => {
-      if(bangleOption.name == "팔찌"){
-            retTxt += "\n" +bangleOption.tier +"T " + bangleOption.grade +" ("+bangleOption.bangleValue+"%)";
-        bangleOption.options.forEach(option =>{
+      if (bangleOption.name == "팔찌") {
+        retTxt += "\n" + bangleOption.tier + "T " + bangleOption.grade + " (" + bangleOption.bangleValue + "%)";
+        bangleOption.options.forEach(option => {
           retTxt += "\n" + (option.grade ? "[" + option.grade + "] " : "") + option.optionName;
         })
       }
     })
     msg.reply(retTxt);
+  }
+  else if (param == '큐브' || param == 'ㅋㅂ') {
+    var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/cube?roomCode=" + roomCode + "&userCode=" + userCode).ignoreContentType(true).get().text();
+    msg.reply(lostArkFunc.getUserCharCubeInfo(msg.author.name, croll));
   }
 
 }
