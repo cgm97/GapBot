@@ -412,13 +412,13 @@ function onCommand(msg) {
       msg.reply(lostArkFunc.lotto(msg.author.name, 0, data));
     }
   }
+  // else if (cmd == "재련") {
+  //   msg.reply("리뉴얼작업중 추후 공지 예정");
+  // }
+  // else if (cmd == "재련랭킹") {
+  //   msg.reply("리뉴얼작업중 추후 공지 예정");
+  // }
   else if (cmd == "재련") {
-    msg.reply("리뉴얼작업중 추후 공지 예정");
-  }
-  else if (cmd == "재련랭킹") {
-    msg.reply("리뉴얼작업중 추후 공지 예정");
-  }
-  else if (cmd == "재련테스트") {
     var userId = msg.author.hash ? msg.author.hash : msg.author.name;
     var roomId = msg.channelId;
     var userName = msg.author.name;
@@ -564,7 +564,7 @@ function onCommand(msg) {
 
 
   }
-  else if (cmd == '재련랭킹테스트') {
+  else if (cmd == '재련랭킹') {
     var userId = msg.author.hash ? msg.author.hash : msg.author.name;
     var roomId = msg.channelId;
     var url = "https://api.loagap.com/bot/enhance/rank";
@@ -584,8 +584,6 @@ function onCommand(msg) {
 
     const allRank = data.allRanking || [];
     // const myRank = data.myRanking||null;
-
-    
     let rankingText = "";
 
     // STEP 내림차순, 같은 STEP은 ACHIEVE_DTTI 오름차순 정렬
