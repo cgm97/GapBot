@@ -270,7 +270,7 @@ function onCommand(msg) {
     })
     msg.reply(retTxt);
   }
-  else if (param == '큐브' || param == 'ㅋㅂ') {
+  else if (msg.command == '큐브' || msg.command == 'ㅋㅂ') {
     var croll = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/cube?roomCode=" + roomCode + "&userCode=" + userCode).ignoreContentType(true).get().text();
     msg.reply(lostArkFunc.getUserCharCubeInfo(msg.author.name, croll));
   }

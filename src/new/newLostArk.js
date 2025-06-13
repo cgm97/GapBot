@@ -97,10 +97,12 @@ function onMessage(msg) {
     else if (param == '장신구' || param == '악세' || param == 'ㅇㅅ' || param == 'ㅈㅅㄱ' || param == 'ㄴㅈㅅㄱ' || param == '내장신구'
       || param == '내악세' || param == 'ㄴㅇㅅ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == 'ㄴㅈㅅㄱ' || param == '내장신구' || param == '내악세' || param == 'ㄴㅇㅅ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
 
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
@@ -127,12 +129,14 @@ function onMessage(msg) {
     //   })
     //   msg.reply(retTxt);
     // }
-    else if (param == '내실' || param == 'ㄴㅅ' || param == '내내실' || param == 'ㄴㄴㅅ' ) {
+    else if (param == '내실' || param == 'ㄴㅅ' || param == '내내실' || param == 'ㄴㄴㅅ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == '내내실' || param == 'ㄴㄴㅅ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str + "/collectibles").ignoreContentType(true).get().text();
       } catch (e) {
@@ -156,10 +160,12 @@ function onMessage(msg) {
     }
     else if (param == '부캐' || param == 'ㅂㅋ' || param == '내부캐' || param == 'ㄴㅂㅋ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == '내부캐' || param == 'ㄴㅂㅋ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch (e) {
@@ -172,10 +178,12 @@ function onMessage(msg) {
     else if (param == '원정대' || param == 'ㅇㅈㄷ' || param == '내원정대' || param == 'ㄴㅇㅈㄷ') {
       var data;
 
-      myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-      str = myNickName;
-      if (str == "") {
-        return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+      if (param == '내원정대' || param == 'ㄴㅇㅈㄷ') {
+        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+        str = myNickName;
+        if (str == "") {
+          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        }
       }
 
       var url = "https://developer-lostark.game.onstove.com/characters/" + str + "/siblings";
@@ -226,10 +234,12 @@ function onMessage(msg) {
     }
     else if (param == '주급' || param == 'ㅈㄱ' || param == '내주급' || param == 'ㄴㅈㄱ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == '내주급' || param == 'ㄴㅈㄱ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch (e) {
@@ -244,12 +254,14 @@ function onMessage(msg) {
       msg.reply(header + body);
 
     }
-    else if (param == '앜패' || param == 'ㅇㅍ'|| param == '내앜패' || param == 'ㄴㅇㅍ') {
+    else if (param == '앜패' || param == 'ㅇㅍ' || param == '내앜패' || param == 'ㄴㅇㅍ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == '내앜패' || param == 'ㄴㅇㅍ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch (e) {
@@ -363,10 +375,12 @@ function onMessage(msg) {
     }
     else if (param == '스킬' || param == 'ㅅㅋ' || param == '내스킬' || param == 'ㄴㅅㅋ') {
       try {
-        myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
-        str = myNickName;
-        if (str == "") {
-          return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+        if (param == '내스킬' || param == 'ㄴㅅㅋ') {
+          myNickName = lostArkFunc.getMyNickName(userCode, roomCode);
+          str = myNickName;
+          if (str == "") {
+            return msg.reply("빈틈봇과 연동이 되어있지않습니다.\n(빈틈봇연동 을 입력 해주세요.)");
+          }
         }
         var croll = org.jsoup.Jsoup.connect("https://api.korlark.com/lostark/characters/" + str).ignoreContentType(true).get().text();
       } catch (e) {
@@ -599,7 +613,7 @@ function onCommand(msg) {
         return (
           "#" + (index + 1) +
           " | " + item.USER_NAME + " (" + item.NICKNAME + ")" +
-          " | 단계: " + item.STEP 
+          " | 단계: " + item.STEP
           // +" | 달성: " + item.ACHIEVE_DTTI
         );
       }).join('\n');
