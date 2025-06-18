@@ -1,18 +1,18 @@
 const bot = BotManager.getCurrentBot();
 
-// const API = require('key');
-// const lostArkFunc = require('LostArkFunc');
-// var { KakaoApiService, KakaoShareClient } = require('kakaolink');
+const API = require('key');
+const lostArkFunc = require('LostArkFunc');
+var { KakaoApiService, KakaoShareClient } = require('kakaolink');
 
-// const service = KakaoApiService.createService();
-// const client = KakaoShareClient.createClient();
+const service = KakaoApiService.createService();
+const client = KakaoShareClient.createClient();
 
-// const cookies = service.login({
-//     signInWithKakaoTalk: true,
-//     context: App.getContext(), // 레거시: Api.getContext()
-// }).awaitResult();
+const cookies = service.login({
+    signInWithKakaoTalk: true,
+    context: App.getContext(), // 레거시: Api.getContext()
+}).awaitResult();
 
-// client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
+client.init(API.KAKAOLINK_KEY, 'https://open.kakao.com', cookies);
 /**
  * (string) msg.content: 메시지의 내용
  * (string) msg.room: 메시지를 받은 방 이름

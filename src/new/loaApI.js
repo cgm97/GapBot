@@ -33,8 +33,8 @@ const Data = require('data');
  */
 function onMessage(msg) {
 
-    if(!msg.isGroupChat){
-        return ;
+    if (!msg.isGroupChat) {
+        return;
     }
 
     if (msg.content.includes('vs')) {
@@ -65,15 +65,15 @@ function onMessage(msg) {
             try {
                 str = cmdArr.slice(1).join(' '); // 두 번째 요소부터 결합하여 문자열로 만듦
                 var args = getPriceAuctionItem(str);
-                
+
                 var date = new Date();
                 var year = date.getFullYear();
                 var month = ("0" + (1 + date.getMonth())).slice(-2);
                 var day = ("0" + date.getDate()).slice(-2);
                 var today = year + month + day;
-                var jewels = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date="+today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                var jewels = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date=" + today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
                 var jewelsInfo = JSON.parse(jewels);
-                
+
                 var keys = Object.keys(jewelsInfo);
 
                 var text = "📢 " + args.itemName + "\n";
@@ -81,12 +81,12 @@ function onMessage(msg) {
 
                 // forEach를 사용하여 각 키에 대한 처리
                 keys.forEach(key => {
-                    if(key ==  args.itemName){
+                    if (key == args.itemName) {
                         const jewel = jewelsInfo[key];  // 해당 키에 대한 보석 정보
                         const yesterdayPrice = jewel.yesterdayPrice; // 어제가격
                         const priceGap = (args.price - yesterdayPrice);
-                        
-                        text += "\n\n전일대비 : " + set_comma(priceGap) + "("+calculatePercentage(yesterdayPrice,args.price)+")";                       
+
+                        text += "\n\n전일대비 : " + set_comma(priceGap) + "(" + calculatePercentage(yesterdayPrice, args.price) + ")";
                     }
                 });
 
@@ -134,220 +134,61 @@ function onMessage(msg) {
         }
         else if (param == '시세') {
             var text = "";
-            let type = cmdArr[2] || "고대"; // 고대,유물
-            let count = cmdArr[3] || 3; // 연마단계
-            // 고대 1연마 : 목(6) 나머지 5      유물 1연마 : 목(5) 나머지 4
-            // 고대 2연마 : 목(9) 나머지 8      유물 2연마 : 목(7) 나머지 6
-            // 고대 3연마 : 목(13) 나머지 12    유물 3연마 : 목(10) 나머지 9
-            let point = 0;
-            let itemLv = 1680;
-            if (type == "고대") {
-                if (count == 3) {
-                    point = 13;
-                }
-                else if (count == 2) {
-                    point = 9;
-                }
-                else if (count == 1) {
-                    point = 6;
-                }
-                else {
-                    msg.reply("명령어를 확인해주세요.\n올바른 명령어 : .시세 상 고대 연마단계(1~3)");
-                    return;
-                }
-                itemLv = 1680;
-            }
-            if (type == "유물") {
-                if (count == 3) {
-                    point = 10;
-                }
-                else if (count == 2) {
-                    point = 7;
-                }
-                else if (count == 1) {
-                    point = 5;
-                }
-                else {
-                    msg.reply("명령어를 확인해주세요.\n올바른 명령어 : .시세 상 고대 연마단계(1~3)");
-                    return;
-                }
-                itemLv = 1640;
-            }
-            // else{
-            //     msg.reply("명령어를 확인해주세요.\n올바른 명령어 : .시세 상 고대 연마단계(1~3)");
-            //     return;
-            // }
+            if (str == '상' || str =='상상' || str =='상중' || str =='상하' || str =='중' || str =='중상' || str =='중중' || str =='중하') {
+                let grade = cmdArr[2] || "고대"; // 고대,유물
+                let enhance = cmdArr[3] || 3; // 연마단계
 
-            if (str == '상') {
-                msg.reply("시세 " + str + " 검색중...");
-                // 200010 목걸이 7(연마) 추피 41 3 13   200020 귀걸이 7(연마) 공% 45 3 9    200030 반지 7(연마) 치적% 49 3 9
-                // 200010 목걸이 7(연마) 적추피 42 3 13 200020 귀걸이 7(연마) 무공% 46 3 9  200030  반지 7(연마) 치피% 50 3 9
-                // 200010 목걸이 7(연마) 공+ 53 3 13    200020 귀걸이 7(연마) 공+ 53 3 9    200030  반지 7(연마) 공+ 53 3 9
-                // 200010 목걸이 7(연마) 무공+ 54 3 13  200020 귀걸이 7(연마) 무공+ 54 3 9  200030  반지 7(연마) 무공+ 53 3 9
-                // 200010 목걸이 7(연마) 낙인력 44 3 13  200030  반지 7(연마) 아공강% 51 3 9 200030  반지 7(연마) 아피강% 52 3 9
-                // 200010 목걸이 7(연마) 세레나데 43 3 13
-                text += "📢 상단일 최저가(" + type + ", 연마 " + count + "단계)\n";
+                if((grade != "고대" && grade != "유물") || (Number(enhance) != 1 && Number(enhance) != 2 && Number(enhance) != 3)){
+                    return msg.reply("옵션1 옵션2를 정확히 입력하세요.");
+                }
+
+                if ((str == '상상' || str == '상중' || str == '상하' || str == '중상' || str == '중중' || str == '중하') && Number(enhance) < 2) {
+                    return msg.reply(str + "은 연마단계를 2이상 입력하세요.");
+                }
+
                 try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 42, 200, point), count)) + "\n";
-                    text += "추가피해%: " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 41, 260, point), count)) + "\n";
-                    text += "낙인력%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 44, 800, point), count)) + "\n";
-                    // text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,12,point), count))+"\n";
+                    var accessroy = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/accessory?title=" + str + "&enhance=" + enhance + "&grade=" + grade).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                    accessroy = JSON.parse(accessroy);
+                    const items = accessroy.items;
 
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions(7, 45, 155, point - 1), count)) + "\n";
-                    text += "무공%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions(7, 46, 300, point - 1), count)) + "\n";
+                    text += "📢 " + str + "(" + grade + ", 연마 " + enhance + "단계)\n";
+                    var diffText = '\n전일대비 ▼' + '\u200b'.repeat(501)+"\n";
 
-                    text += "\n※ 반지\n";
-                    text += "치피%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 50, 400, point - 1), count)) + "\n";
-                    text += "치적%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 49, 155, point - 1), count)) + "\n";
-                    text += "아피강%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 52, 750, point - 1), count)) + "\n";
-                    text += "아공강%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 51, 500, point - 1), count));
+                    items.forEach(item => {
+                        const name = item.name;
+                        const acsryItems = item.items;
+
+                        text += "\n❚ " + name;
+                        diffText += "\n❚ " + name;
+
+                        acsryItems.forEach(acsry => {
+
+                            const option = acsry.option.map(opt => {
+                                if (!opt.includes(" ")) return opt; // 스페이스바 없으면 그대로
+                                const parts = opt.trim().split(" ");
+                                const suffix = opt.match(/[%+]+$/);
+                                return parts.map(p => p[0]).join("") + (suffix ? suffix[0] : "");
+                            }).join(" ");
+                            const price = acsry.price;
+                            const priceDiff = acsry.priceDiff || 0;
+                            const percentDiff = acsry.percentDiff || 0;
+
+                            if (price === 0 && priceDiff === 0) {
+                                text += "\n" + option + ": 매물 없음";
+                                diffText += "\n" + option + ": 매물 없음";
+                            } else {
+                                text += "\n" + option + ": " + set_comma(price);
+                                diffText += "\n" + option + ": " + set_comma(priceDiff) + " (" + calculatePercentageemoz(percentDiff) + ")";
+                            }
+                        });
+                        text += "\n";
+                        diffText += "\n";
+                    });
+                    if (grade == "고대") {
+                        text += diffText;
+                    }
                 } catch (e) {
                     text = "검색 중 오류발생\n검색결과가 없습니다.";
-                }
-            } else if (str == '상상') {
-                if (count < 2) {
-                    msg.reply(str + "의 연마단계 조건은 2단계부터 검색 가능합니다.");
-                    return;
-                }
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 상상 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 42, 41, 200, 260, point), count)) + "\n";
-                    text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 44, 43, 800, 600, point), count)) + "\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 45, 46, 155, 300, point - 1), count)) + "\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 54, 300, 960, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 50, 49, 400, 155, point - 1), count)) + "\n";
-                    text += "아피강% + 아공강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 52, 51, 750, 500, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
-                }
-            } else if (str == '상중') {
-                if (count < 2) {
-                    msg.reply(str + "의 연마단계 조건은 2단계부터 검색 가능합니다.");
-                    return;
-                }
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 상중 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 42, 41, 200, 160, point), count)) + "\n";
-                    text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 41, 42, 260, 120, point), count)) + "\n";
-                    text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 44, 43, 800, 360, point), count)) + "\n";
-                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,10,point), count))+"\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 45, 46, 155, 180, point - 1), count)) + "\n";
-                    text += "무공% + 공격력% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 45, 300, 95, point - 1), count)) + "\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 54, 300, 480, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 50, 49, 400, 95, point - 1), count)) + "\n";
-                    text += "치적% + 치피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 49, 50, 155, 240, point - 1), count)) + "\n";
-                    text += "아피강% + 아공강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 52, 51, 750, 300, point - 1), count)) + "\n";
-                    text += "아공강% + 아피강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 51, 52, 500, 450, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
-                }
-            } else if (str == '상하') {
-                if (count < 2) {
-                    msg.reply(str + "의 연마단계 조건은 2단계부터 검색 가능합니다.");
-                    return;
-                }
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 상하 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 42, 41, 200, 70, point), count)) + "\n";
-                    text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 41, 42, 260, 55, point), count)) + "\n";
-                    text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 44, 43, 800, 160, point), count)) + "\n";
-                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,12,4,point), count))+"\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 45, 46, 155, 80, point - 1), count)) + "\n";
-                    text += "무공% + 공격력% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 45, 300, 40, point - 1), count)) + "\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 54, 300, 195, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 50, 49, 400, 40, point - 1), count)) + "\n";
-                    text += "치적% + 치피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 49, 50, 155, 110, point - 1), count)) + "\n";
-                    text += "아피강% + 아공강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 52, 51, 750, 135, point - 1), count)) + "\n";
-                    text += "아공강% + 아피강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 51, 52, 500, 200, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
-                }
-            } else if (str == '중') {
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 중단일 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 42, 120, point), count)) + "\n";
-                    text += "추가피해%: " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 41, 160, point), count)) + "\n";
-                    text += "낙인력%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions(7, 44, 480, point), count)) + "\n";
-                    // text += "세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions(7,43,10,point), count))+"\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions(7, 45, 95, point - 1), count)) + "\n";
-                    text += "무공%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions(7, 46, 180, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 50, 240, point - 1), count)) + "\n";
-                    text += "치적%    : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 49, 95, point - 1), count)) + "\n";
-                    text += "아피강%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 52, 450, point - 1), count)) + "\n";
-                    text += "아공강%  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions(7, 51, 300, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
-                }
-            } else if (str == '중중') {
-                if (count < 2) {
-                    msg.reply(str + "의 연마단계 조건은 2단계부터 검색 가능합니다.");
-                    return;
-                }
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 중중 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 42, 41, 120, 160, point), count)) + "\n";
-                    text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 44, 43, 480, 360, point), count)) + "\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 45, 46, 95, 180, point - 1), count)) + "\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 54, 180, 480, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 50, 49, 240, 95, point - 1), count)) + "\n";
-                    text += "아피강% + 아공강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 52, 51, 450, 300, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
-                }
-            } else if (str == '중하') {
-                msg.reply("시세 " + str + " 검색중...");
-                text += "📢 중하 최저가(" + type + ", 연마 " + count + "단계)\n";
-                try {
-                    text += "\n※ 목걸이\n";
-                    text += "적주피% + 추가피해% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 42, 41, 120, 70, point), count)) + "\n";
-                    text += "추가피해% + 적주피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 41, 42, 160, 55, point), count)) + "\n";
-                    text += "낙인력% + 세레나데 : " + getBuyPrice(getAccessoriesPrice(itemLv, 200010, getEtcOptions2(7, 44, 43, 480, 160, point), count)) + "\n";
-                    // text += "세레나데 + 낙인력% : " + getBuyPrice(getAccessoriesPrice(itemLv,200010,getEtcOptions2(7,43,44,10,4,point), count))+"\n";
-
-                    text += "\n※ 귀걸이\n";
-                    text += "공격력% + 무공% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 45, 46, 95, 80, point - 1), count)) + "\n";
-                    text += "무공% + 공격력% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 45, 180, 40, point - 1), count)) + "\n";
-                    text += "무공% + 무공+  : " + getBuyPrice(getAccessoriesPrice(itemLv, 200020, getEtcOptions2(7, 46, 54, 180, 195, point - 1), count)) + "\n";
-
-                    text += "\n※ 반지\n";
-                    text += "치피% + 치적% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 50, 49, 240, 40, point - 1), count)) + "\n";
-                    text += "치적% + 치피% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 49, 50, 95, 110, point - 1), count)) + "\n";
-                    text += "아피강% + 아공강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 52, 51, 450, 135, point - 1), count)) + "\n";
-                    text += "아공강% + 아피강% : " + getBuyPrice(getAccessoriesPrice(itemLv, 200030, getEtcOptions2(7, 51, 52, 300, 200, point - 1), count));
-                } catch (e) {
-                    text = "검색 중 오류발생";
                 }
             } else if (cmdArr[1] == '유각') {
                 let page = cmdArr[2] || 1;
@@ -366,10 +207,10 @@ function onMessage(msg) {
                     var year = today.getFullYear();
                     var month = (today.getMonth() + 1).toString().padStart(2, '0');
                     var day = today.getDate().toString().padStart(2, '0');
-                    var yesterdayDate = year+''+month+''+day;
+                    var yesterdayDate = year + '' + month + '' + day;
 
                     // 전일자 각인서 시세 조회
-                    var books = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/booksLog?date="+yesterdayDate).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+                    var books = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/booksLog?date=" + yesterdayDate).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
                     var booksInfo = JSON.parse(books);
                     var lastText = "";
 
@@ -377,14 +218,14 @@ function onMessage(msg) {
                         data.Items.forEach(item => {
                             text += item.Name.replace("각인서", "").replace(" ", "") + " " + set_comma(item.CurrentMinPrice) + "\n";
 
-                             // 전일 각인서 찾기
-                             booksInfo.forEach(book => {
-                                if(item.Name == book.name){
+                            // 전일 각인서 찾기
+                            booksInfo.forEach(book => {
+                                if (item.Name == book.name) {
                                     const name = book.name.replace("각인서", "").replace(" ", "");
                                     const price = book.price;
                                     var priceGap = (item.CurrentMinPrice - price);
-                                    
-                                    lastText += name + " " + set_comma(priceGap) + " (" + calculatePercentage(price,item.CurrentMinPrice) + ")"+ "\n";
+
+                                    lastText += name + " " + set_comma(priceGap) + " (" + calculatePercentage(price, item.CurrentMinPrice) + ")" + "\n";
                                 }
                             });
 
@@ -512,11 +353,11 @@ function onMessage(msg) {
                 var month = ("0" + (1 + date.getMonth())).slice(-2);
                 var day = ("0" + date.getDate()).slice(-2);
                 var today = year + month + day;
-                
-                text += "📢 보석시세 "+year +"-"+ month +"-"+ day+"_ 0시기준\n";
-                var jewels1 = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date="+today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
+
+                text += "📢 보석시세 " + year + "-" + month + "-" + day + "_ 0시기준\n";
+                var jewels1 = org.jsoup.Jsoup.connect("https://api.loagap.com/bot/jewelsLog?date=" + today).ignoreContentType(true).header("referer", "bot.loagap.com").get().text();
                 var jewelsInfo = JSON.parse(jewels1);
-                
+
                 var keys = Object.keys(jewelsInfo);
 
                 // 2. forEach를 사용하여 각 키에 대한 처리
@@ -541,15 +382,22 @@ function extractGemInfo(str) {
     const parts = str.split(" "); // 공백 기준으로 문자열 나누기
     const level = parts[0].match(/\d+/)[0]; // 숫자만 추출
     const gemInitial = parts[1][0]; // 보석의 첫 글자 추출
-    return level+gemInitial;
+    return level + gemInitial;
 }
 
 // 퍼센트게산
 function calculatePercentage(yesterday, today) {
     if (yesterday === 0) return ""; // 0으로 나누는 오류 방지
-    let percentageChange = ((today - yesterday) / yesterday * 100).toFixed(2); 
-    if (percentageChange > 0) return '▲'+percentageChange+'%';
-    if (percentageChange < 0) return '▼'+Math.abs(percentageChange)+'%';
+    let percentageChange = ((today - yesterday) / yesterday * 100).toFixed(2);
+    if (percentageChange > 0) return '▲' + percentageChange + '%';
+    if (percentageChange < 0) return '▼' + Math.abs(percentageChange) + '%';
+    return `0.00%`; // 변화 없을 때
+}
+
+// 퍼센트게산
+function calculatePercentageemoz(percentageChange) {
+    if (percentageChange > 0) return '▲' + percentageChange + '%';
+    if (percentageChange < 0) return '▼' + Math.abs(percentageChange) + '%';
     return `0.00%`; // 변화 없을 때
 }
 
@@ -609,58 +457,6 @@ function getPriceAuctionItem(itemName) {
     }
     return args;
 }
-
-// 아이템 상세정보 (상단일)
-function getEtcOptions(firstOption, secondOption, value, point) {
-
-    var etcOptions = [
-        {
-            // 상단일
-            "FirstOption": firstOption,
-            "SecondOption": secondOption,
-            "MinValue": value,
-            "MaxValue": value
-        }
-        ,
-        { // 깨포
-            "FirstOption": 8,
-            "SecondOption": 1,
-            "MinValue": point,
-            "MaxValue": point
-        }
-    ]
-    return etcOptions;
-}
-// 아이템 상세정보 (상중)
-function getEtcOptions2(firstOption, secondOption, secondOption2, value1, value2, point) {
-
-    var etcOptions = [
-        {
-            // 상옵
-            "FirstOption": firstOption,
-            "SecondOption": secondOption,
-            "MinValue": value1,
-            "MaxValue": value1
-        }
-        ,
-        {
-            // 중옵
-            "FirstOption": firstOption,
-            "SecondOption": secondOption2,
-            "MinValue": value2,
-            "MaxValue": value2
-        }
-        ,
-        { // 깨포
-            "FirstOption": 8,
-            "SecondOption": 1,
-            "MinValue": point,
-            "MaxValue": point
-        }
-    ]
-    return etcOptions;
-}
-
 function getItemPrice(itemName, Code) {
 
     // auctions = 경매장 - > 보석
